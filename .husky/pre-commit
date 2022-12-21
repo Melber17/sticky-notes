@@ -1,4 +1,20 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-yarn lint:check && yarn test
+set -e
+
+pushd .husky
+source ./colorize.sh
+popd
+
+is_pre_check_success()
+{
+    yarn lint:check --color
+}
+
+if is_pre_check_success; then
+    printMessageNeutral "-- PRE COMMIT SUCCESS --"
+else
+    printMessageError "-- PRE COMMIT ERROR --"
+    exit 1
+fi
