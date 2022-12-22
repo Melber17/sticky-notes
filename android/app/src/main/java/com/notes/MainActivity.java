@@ -12,8 +12,8 @@ public class MainActivity extends ReactActivity {
    * rendering of the component.
    */
   @Override
-  protected void onCreate(Bundle savedInstanceState) {
-      SplashScreen.show(this, R.style.SplashScreenTheme);
+  protected void onCreate(android.os.Bundle savedInstanceState) {
+      SplashScreen.show(this, R.style.SplashScreenTheme, true);
       super.onCreate(savedInstanceState);
   }
 
