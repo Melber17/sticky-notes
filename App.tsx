@@ -1,21 +1,28 @@
 import React, { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { SafeAreaView } from "react-native";
 import SplashScreen from "react-native-splash-screen";
-import styled, { ThemeProvider } from "styled-components/native";
+import styled from "styled-components/native";
 
 import { WithTheme } from "./src/app/providers";
-import { darkTheme } from "./src/shared/config";
+import i18next from "./src/shared/lib/i18n";
 
 export const App = () => {
+	const { t } = useTranslation();
+
 	useEffect(() => {
 		SplashScreen.hide();
 	}, []);
+
+	if (!i18next.isInitialized) {
+		return null;
+	}
 
 	return (
 		<WithTheme>
 			<SafeAreaView>
 				<Container>
-					<Title>HELOOO</Title>
+					<Title>{t("general.welcome")}</Title>
 				</Container>
 			</SafeAreaView>
 		</WithTheme>
