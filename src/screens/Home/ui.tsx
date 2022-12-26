@@ -4,13 +4,14 @@ import styled from "styled-components/native";
 import { Spacer } from "../../shared/config";
 import { WithSafeArea } from "../../shared/ui";
 import { Header } from "../../widgets/Header";
+import { NotesList } from "../../widgets/notes-list";
 
 export const HomeScreen: React.FC = () => {
-
 	return (
 		<WithSafeArea>
 			<Container>
 				<Header />
+				<NotesList data={null} />
 			</Container>
 		</WithSafeArea>
 	);
