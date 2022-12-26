@@ -1,7 +1,7 @@
 export default {
 	translation: {
 		general: {
-			welcome: "Hello",
+			title: "Notes",
 		},
 	},
 };

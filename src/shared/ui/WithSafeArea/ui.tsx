@@ -15,7 +15,7 @@ interface IProps {
 export const WithSafeArea: React.FC<IProps> = ({
 	children,
 	backgroundColor,
-	barStyle = "dark-content",
+	barStyle = "light-content",
 }) => {
 	const { top } = useSafeAreaInsets();
 
@@ -52,7 +52,5 @@ const SafeAreaIOS = styled.SafeAreaView<{
 	inset: number;
 }>`
 	flex: 1;
-	margin-top: ${({ inset }) => inset}px;
-	background: ${(props) =>
-		props.backgroundColor ?? props.theme.colors.background};
+	background: ${(props) => props.theme.colors.background};
 `;

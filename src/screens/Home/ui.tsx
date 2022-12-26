@@ -1,17 +1,16 @@
 import React from "react";
-import { useTranslation } from "react-i18next";
-import { Text } from "react-native";
 import styled from "styled-components/native";
 
+import { Spacer } from "../../shared/config";
 import { WithSafeArea } from "../../shared/ui";
+import { Header } from "../../widgets/Header";
 
 export const HomeScreen: React.FC = () => {
-	const { t } = useTranslation();
 
 	return (
 		<WithSafeArea>
 			<Container>
-				<Text>{t("general.welcome")}</Text>
+				<Header />
 			</Container>
 		</WithSafeArea>
 	);
@@ -19,5 +18,6 @@ export const HomeScreen: React.FC = () => {
 
 const Container = styled.View`
 	flex: 1;
+	margin: ${Spacer.SMALL}px ${Spacer.MEDIUM}px 0;
 	background: ${(props) => props.theme.colors.background};
 `;
