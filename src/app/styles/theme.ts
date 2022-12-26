@@ -1,4 +1,4 @@
-import { DARK_BACKGROUND_COLOR, WHITE_COLOR } from "./colors";
+import { DARK_BACKGROUND_COLOR, WHITE_COLOR } from "../../shared/config";
 
 export const lightTheme = {
 	colors: {

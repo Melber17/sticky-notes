@@ -2,7 +2,7 @@ import React from "react";
 import { ThemeProvider } from "styled-components/native";
 import { useColorScheme } from "react-native";
 
-import { darkTheme, lightTheme } from "../../shared/config";
+import { darkTheme, lightTheme } from "../styles";
 
 interface IProps {
 	children: React.ReactNode;
