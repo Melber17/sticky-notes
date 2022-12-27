@@ -5,6 +5,7 @@ import SplashScreen from "react-native-splash-screen";
 import { RootScreens } from "./config";
 import { HomeScreen } from "./Home";
 import i18next from "../shared/lib/i18n";
+import { CreateNoteScreen } from "./CreateNote";
 
 export type RootStackListType = {
 	HomeScreen: undefined;
@@ -30,6 +31,7 @@ export const Routing: React.FC = () => {
 			initialRouteName={RootScreens.HOME}
 		>
 			<Stack.Screen name={RootScreens.HOME} component={HomeScreen} />
+			<Stack.Screen name={RootScreens.CREATE_NOTE} component={CreateNoteScreen} />
 		</Stack.Navigator>
 	);
 };
