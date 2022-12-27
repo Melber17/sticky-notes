@@ -5,9 +5,12 @@ import { useTranslation } from "react-i18next";
 import { ButtonBack, ButtonWithIcon, Input } from "../../shared/ui";
 import CheckIcon from "../../shared/assets/icons/checkIcon.svg";
 import { Spacer } from "../../shared/config";
+import { SelectColor } from "../select-color";
 
 export const CreateNoteForm: React.FC = () => {
 	const { t } = useTranslation();
+	const [isVisibleModal, setIsVisibleModal] = useState(true);
+	const [colorValue, setColorValue] = useState("");
 	const [titleValue, setTitleValue] = useState("");
 	const [descriptionValue, setDescriptionValue] = useState("");
 
@@ -50,6 +53,9 @@ export const CreateNoteForm: React.FC = () => {
 				/>
 			</InputWrapper>
 
+			<SelectColor visible={isVisibleModal} onRequestClose={() => {
+				setIsVisibleModal(false);
+			}} colorValue={colorValue} onChangeColor={setColorValue}/>
 		</Container>
 	);
 };

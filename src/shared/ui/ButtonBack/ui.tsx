@@ -7,9 +7,10 @@ import { GRAY_COLOR, Spacer } from "../../config";
 
 interface IProps {
 	icon?: JSX.Element;
+	onPress?: () => void;
 }
 
-export const ButtonBack: React.FC<IProps> = ({ icon }) => {
+export const ButtonBack: React.FC<IProps> = ({ icon, onPress }) => {
 
 	const navigation = useNavigation();
 
@@ -25,8 +26,18 @@ export const ButtonBack: React.FC<IProps> = ({ icon }) => {
 		return <LeftArrowIcon />;
 	}
 
+	const handlePressButton = () => {
+		if (onPress) {
+			onPress();
+
+			return;
+		}
+
+		handleNavigateBack();
+	};
+
 	return (
-		<Wrapper onPress={ handleNavigateBack }>
+		<Wrapper onPress={ handlePressButton }>
 			{renderIcon()}
 		</Wrapper>
 	);

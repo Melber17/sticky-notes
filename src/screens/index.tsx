@@ -32,6 +32,10 @@ export const Routing: React.FC = () => {
 		>
 			<Stack.Screen name={RootScreens.HOME} component={HomeScreen} />
 			<Stack.Screen name={RootScreens.CREATE_NOTE} component={CreateNoteScreen} />
+			{/* <Stack.Group screenOptions={{ presentation: 'modal' }}>
+        <RootStack.Screen name={RootScreens.SELECT_COLOR} component={ModalScreen} />
+      </Stack.Group> */}
+
 		</Stack.Navigator>
 	);
 };

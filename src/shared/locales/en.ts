@@ -6,7 +6,9 @@ export default {
 		},
 		note: {
 			title: "Title",
-			description: "Type something..."
+			description: "Type something...",
+			color: "Set color",
+			background: "Set background color"
 		}
 	},
 };

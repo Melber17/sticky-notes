@@ -4,3 +4,4 @@ export * from "./Text";
 export * from "./ButtonWIthIcon";
 export * from "./ButtonBack";
 export * from "./Input";
+export * from "./Button";

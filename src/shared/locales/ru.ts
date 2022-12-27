@@ -6,7 +6,9 @@ export default {
 		},
 		note: {
 			title: "Название",
-			description: "Введите что-нибудь..."
+			description: "Введите что-нибудь...",
+			color: "Установить цвет",
+			background: "Установить цвет фона"
 		}
 	},
 };
