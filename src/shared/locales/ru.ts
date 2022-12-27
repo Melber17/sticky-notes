@@ -4,5 +4,9 @@ export default {
 			title: "Заметки",
 			emptyTitle: "Создайте свою первую заметку!"
 		},
+		note: {
+			title: "Название",
+			description: "Введите что-нибудь..."
+		}
 	},
 };

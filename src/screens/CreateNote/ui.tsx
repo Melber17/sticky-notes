@@ -1,19 +1,29 @@
 import React from "react";
+import { ScrollView } from "react-native";
 import styled from "styled-components/native";
 
+import { CreateNoteForm } from "../../features/create-note-form";
 import { Spacer } from "../../shared/config";
-import { ButtonBack, WithSafeArea } from "../../shared/ui";
+import { WithSafeArea } from "../../shared/ui";
 
 export const CreateNoteScreen: React.FC = () => {
 	return (
 		<WithSafeArea>
-			<Container>
-				<ButtonBack />
-			</Container>
+
+			<ScrollView
+				showsVerticalScrollIndicator={false}
+				keyboardShouldPersistTaps="never"
+			>
+				<Container>
+
+					<CreateNoteForm />
+				</Container>
+
+			</ScrollView>
 		</WithSafeArea>
 	);
 };
 
 const Container = styled.View`
-	margin: ${Spacer.SMALL}px ${Spacer.MEDIUM}px 0;
+	padding: ${Spacer.SMALL}px ${Spacer.MEDIUM}px 0;
 `;

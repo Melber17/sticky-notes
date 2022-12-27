@@ -4,5 +4,9 @@ export default {
 			title: "Notes",
 			emptyTitle: "Create your first note !"
 		},
+		note: {
+			title: "Title",
+			description: "Type something..."
+		}
 	},
 };

@@ -62,5 +62,5 @@ const Button = styled.TouchableOpacity`
 	background: ${(props) => props.theme.colors.background};
 	position: absolute;
 	bottom: ${Spacer.EXTRA_LARGE}px;
-	right: ${Spacer.MEDIUM}px;
+	right: ${Spacer.SMALL}px;
 `;
