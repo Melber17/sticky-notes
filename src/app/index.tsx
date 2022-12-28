@@ -6,6 +6,7 @@ import { enableFreeze, enableScreens } from "react-native-screens";
 import { Routing } from "../screens";
 import { PlatformType } from "../shared/lib/device";
 import { WithNavigation, WithTheme } from "./providers";
+import { WithRedux } from "./providers/with-redux";
 
 enableFreeze(true);
 
@@ -20,7 +21,9 @@ export const App: React.FC = () => {
 		<GestureHandlerRootView style={styles.container}>
 			<WithNavigation>
 				<WithTheme>
-					<Routing />
+					<WithRedux>
+						<Routing />
+					</WithRedux>
 				</WithTheme>
 			</WithNavigation>
 		</GestureHandlerRootView>

@@ -1,6 +1,6 @@
 import React from "react";
-import { ScrollView } from "react-native";
 import styled from "styled-components/native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import { CreateNoteForm } from "../../features/create-note-form";
 import { Spacer } from "../../shared/config";
@@ -10,14 +10,12 @@ export const CreateNoteScreen: React.FC = () => {
 	return (
 		<WithSafeArea>
 
-			<ScrollView
-				showsVerticalScrollIndicator={false}
-				keyboardShouldPersistTaps="handled"
+			<KeyboardAwareScrollView
 			>
 				<Container>
 					<CreateNoteForm />
 				</Container>
-			</ScrollView>
+			</KeyboardAwareScrollView>
 		</WithSafeArea>
 	);
 };
