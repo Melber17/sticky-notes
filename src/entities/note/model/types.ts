@@ -1,18 +1,19 @@
 export interface INote {
-  title: string;
-  description: string;
-  color: string;
-  backgroundColor: string;
+	title: string;
+	description: string;
+	color: string;
+	backgroundColor: string;
 }
 
 export interface INoteResponse extends INote {
-  id: number;
+	id: number;
 }
 
 export enum NotesThunks {
-  CREATE = "CREATE"
+	CREATE = "CREATE",
+	EDIT = "EDIT",
 }
 
 export enum NotesKeys {
-  NOTES = "NOTES"
+	NOTES = "NOTES",
 }

@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from "react";
+import React, { useCallback, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import Animated, { FadeIn } from "react-native-reanimated";
 import styled from "styled-components/native";
@@ -11,14 +11,15 @@ import { Button, ButtonBack, WithSafeArea } from "../../shared/ui";
 import { PlatformType } from "../../shared/lib";
 
 interface IProps {
-  visible: boolean;
-  onRequestClose: () => void;
-  colorValue: string;
-  onChangeColor: (color: string) => void;
+	visible: boolean;
+	onRequestClose: () => void;
+	colorValue: string;
+	onChangeColor: (color: string) => void;
 }
 
 export const SelectColor: React.FC<IProps> = (props) => {
 	const { t } = useTranslation();
+	const defaultColorValue = useMemo(() => props.colorValue, []);
 	const { onRequestClose, onChangeColor } = props;
 
 	const ref = useRef<HoloColorPicker>(null);
@@ -34,40 +35,28 @@ export const SelectColor: React.FC<IProps> = (props) => {
 
 	const handleRenderData = useCallback((children: React.ReactNode) => {
 		if (Platform.OS === PlatformType.ANDROID) {
-			return (
-				<>
-					{children}
-				</>
-			);
+			return <>{children}</>;
 		}
 
-		return (
-			<WithSafeArea>
-				{children}
-			</WithSafeArea>
-		);
+		return <WithSafeArea>{children}</WithSafeArea>;
 	}, []);
 
 	return (
-		<ModalContainer
-			animationType="slide"
-			{...props}>
+		<ModalContainer animationType="slide" {...props}>
 			{handleRenderData(
 				<Container>
 					<ButtonBack onPress={onRequestClose} />
 					<Wrapper entering={FadeIn}>
 						<ColorPicker
 							ref={ref}
+							defaultColor={defaultColorValue}
 							style={{ flex: 1 }}
 							onColorSelected={handleSelectColor}
 						/>
 						<ButtonWrapper>
-							<Button onPress={handleSelectColor}>
-								{t("note.color")}
-							</Button>
+							<Button onPress={handleSelectColor}>{t("note.color")}</Button>
 						</ButtonWrapper>
 					</Wrapper>
-
 				</Container>
 			)}
 		</ModalContainer>
@@ -75,12 +64,12 @@ export const SelectColor: React.FC<IProps> = (props) => {
 };
 
 const ModalContainer = styled.Modal`
-	background: ${props => props.theme.colors.background};
+	background: ${(props) => props.theme.colors.background};
 `;
 
 const Container = styled.View`
 	flex: 1;
-	background: ${props => props.theme.colors.background};
+	background: ${(props) => props.theme.colors.background};
 	padding: ${Spacer.SMALL}px ${Spacer.MEDIUM}px ${Spacer.EXTRA_LARGE}px;
 `;
 

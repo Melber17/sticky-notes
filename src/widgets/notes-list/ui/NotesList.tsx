@@ -3,13 +3,13 @@ import { FlatList, ListRenderItemInfo, useWindowDimensions } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import styled from "styled-components/native";
 
-import { calcCardWidth, INote, NoteCart } from "../../../entities/note";
+import { calcCardWidth, INoteResponse, NoteCart } from "../../../entities/note";
 import { Spacer } from "../../../shared/config";
 import { calcNumberColumns } from "../lib";
 import { EmptyListData } from "./EmptyListData";
 
 interface INotesListProps {
-  data: Nullable<INote[]>;
+  data: Nullable<INoteResponse[]>;
 	headerComponent: JSX.Element;
 }
 
@@ -26,14 +26,14 @@ export const NotesList: React.FC<INotesListProps> = (props) => {
 		return <EmptyListData />;
 	}
 
-	const renderItem = ({ item }: ListRenderItemInfo<INote>) => {
+	const renderItem = ({ item }: ListRenderItemInfo<INoteResponse>) => {
 
 		return (
 			<NoteCart width={cartWidth} {...item} />
 		);
 	};
 
-	const keyExtractor = (_: INote, index: number) => index.toString();
+	const keyExtractor = (_: INoteResponse, index: number) => index.toString();
 
 	return (
 		<Container>

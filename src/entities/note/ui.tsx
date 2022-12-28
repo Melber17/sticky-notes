@@ -1,20 +1,27 @@
+import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { StyleSheet } from "react-native";
 import styled from "styled-components/native";
 
+import { RootScreens } from "../../screens/config";
+import { INavigation } from "../../screens/Home";
 import { BLACK_COLOR, Spacer } from "../../shared/config";
 import { Text } from "../../shared/ui";
-import { INote } from "./model";
+import { INoteResponse } from "./model";
 
-interface INoteCartProps extends INote {
+interface INoteCartProps extends INoteResponse {
   width: number;
 }
 
 export const NoteCart: React.FC<INoteCartProps> = (props) => {
 	const { title, color } = props;
+	const navigation = useNavigation<INavigation>();
+	const handlePressCart = () => {
+		navigation.push(RootScreens.CREATE_NOTE, { editable: false, note: props },);
+	};
 
 	return (
-		<Container style={styles.cart} {...props}>
+		<Container onPress={handlePressCart} style={styles.cart} {...props}>
 			<Title color={color} numberOfLines={3}>
 				{title}
 			</Title>
@@ -36,7 +43,7 @@ const styles = StyleSheet.create({
 	},
 });
 
-const Container = styled.View<INoteCartProps>`
+const Container = styled.TouchableOpacity<INoteCartProps>`
   width: ${({ width }) => width}px;
 	height: 120px;
   background: ${({ backgroundColor }) => backgroundColor};

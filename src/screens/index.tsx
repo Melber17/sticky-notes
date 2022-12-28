@@ -7,11 +7,11 @@ import { HomeScreen } from "./Home";
 import i18next from "../shared/lib/i18n";
 import { CreateNoteScreen } from "./CreateNote";
 import { useAppDispatch } from "../shared/lib";
-import { initializeNotesData } from "../entities/note";
+import { initializeNotesData, INoteResponse } from "../entities/note";
 
 export type RootStackListType = {
 	HomeScreen: undefined;
-	CreateNoteScreen: undefined;
+	CreateNoteScreen: {editable: boolean; note?: INoteResponse};
 };
 
 const Stack = createNativeStackNavigator<RootStackListType>();

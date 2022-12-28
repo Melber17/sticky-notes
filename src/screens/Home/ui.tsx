@@ -12,15 +12,17 @@ import { RootStackListType } from "..";
 import { RootScreens } from "../config";
 import { useAppSelector } from "../../shared/lib";
 
+export type INavigation = StackNavigationProp<RootStackListType, RootScreens.HOME>;
+
 interface IProps {
-	navigation: StackNavigationProp<RootStackListType, RootScreens.HOME>;
+	navigation: INavigation;
 }
 
 export const HomeScreen: React.FC<IProps> = ({ navigation }) => {
 	const { data } = useAppSelector(store => store.notes);
 
 	const handlePressButton = () => {
-		navigation.push(RootScreens.CREATE_NOTE);
+		navigation.push(RootScreens.CREATE_NOTE, { editable: true });
 	};
 
 	return (

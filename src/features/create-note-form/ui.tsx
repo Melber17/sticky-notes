@@ -1,40 +1,73 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components/native";
 import { useTranslation } from "react-i18next";
 import { useNavigation } from "@react-navigation/native";
-import { StyleSheet } from "react-native";
+import { StyleSheet, TextInput } from "react-native";
 
 import { ButtonBack, ButtonWithIcon, Input, Text } from "../../shared/ui";
 import CheckIcon from "../../shared/assets/icons/checkIcon.svg";
-import { BLACK_COLOR, Spacer } from "../../shared/config";
+import { BLACK_COLOR, Spacer, WHITE_COLOR } from "../../shared/config";
 import { SelectColor } from "../select-color";
 import { useAppDispatch } from "../../shared/lib/useRedux";
-import { createNote } from "../../entities/note";
+import { createNote, editNote, INoteResponse } from "../../entities/note";
+import EditIcon from "../../shared/assets/icons/editIcon.svg";
 
 interface ICreateNoteFormProps {
 	isEditable?: boolean;
+	note?: INoteResponse;
 }
 
-export const CreateNoteForm: React.FC<ICreateNoteFormProps> = ({ isEditable }) => {
+export const CreateNoteForm: React.FC<ICreateNoteFormProps> = ({
+	isEditable,
+	note,
+}) => {
 	const { t } = useTranslation();
 	const dispatch = useAppDispatch();
+	const [isEditMode, setIsEditMode] = useState(false);
+	const titleInputRef = useRef<TextInput>(null);
+	const [isEditableValue, setIsEditableValue] = useState(isEditable);
 	const [isVisibleColorModal, setIsVisibleColorModal] = useState(false);
-	const [isVisibleBackgroundColorModal, setIsVisibleBackgroundColorModal] = useState(false);
-	const [colorValue, setColorValue] = useState("#FFFFFF");
-	const [backgroundColorValue, setBackgroundColorValue] = useState("#444444");
-	const [titleValue, setTitleValue] = useState("");
-	const [descriptionValue, setDescriptionValue] = useState("");
+	const [isVisibleBackgroundColorModal, setIsVisibleBackgroundColorModal] =
+		useState(false);
+	const [colorValue, setColorValue] = useState(note?.color ?? WHITE_COLOR);
+	const [backgroundColorValue, setBackgroundColorValue] = useState(
+		note?.backgroundColor ?? "#444444"
+	);
+	const [titleValue, setTitleValue] = useState(note?.title ?? "");
+	const [descriptionValue, setDescriptionValue] = useState(
+		note?.description ?? ""
+	);
 	const navigation = useNavigation();
 	const handleSubmit = async () => {
 		const noteResult = {
 			title: titleValue,
 			description: descriptionValue,
 			color: colorValue,
-			backgroundColor: backgroundColorValue
+			backgroundColor: backgroundColorValue,
 		};
 
 		await dispatch(createNote(noteResult));
 		navigation.goBack();
+	};
+
+	const handleToggleEdit = () => {
+		setIsEditableValue((prevValue) => !prevValue);
+		setIsEditMode((prevValue) => !prevValue);
+	};
+
+	const handleEditNote = async () => {
+		if (note) {
+			const noteResult = {
+				title: titleValue,
+				description: descriptionValue,
+				color: colorValue,
+				backgroundColor: backgroundColorValue,
+				id: note.id,
+			};
+
+			await dispatch(editNote(noteResult));
+			navigation.goBack();
+		}
 	};
 
 	const handleChangeTitle = useCallback((value: string) => {
@@ -46,20 +79,16 @@ export const CreateNoteForm: React.FC<ICreateNoteFormProps> = ({ isEditable }) =
 	}, []);
 
 	const handleToggleColorModal = () => {
-		setIsVisibleColorModal(prevValue => !prevValue);
+		setIsVisibleColorModal((prevValue) => !prevValue);
 	};
 
 	const handleToggleBackgroundColorModal = () => {
-		setIsVisibleBackgroundColorModal(prevValue => !prevValue);
+		setIsVisibleBackgroundColorModal((prevValue) => !prevValue);
 	};
 
 	const handleRenderInputContainer = (children: React.ReactNode) => {
-		if (isEditable) {
-			return (
-				<>
-					{children}
-				</>
-			);
+		if (isEditableValue) {
+			return <>{children}</>;
 		}
 
 		return (
@@ -70,21 +99,51 @@ export const CreateNoteForm: React.FC<ICreateNoteFormProps> = ({ isEditable }) =
 		);
 	};
 
+	const handleRenderEditButton = () => {
+		if (!isEditable && !isEditMode) {
+			return (
+				<ButtonWithIcon onPress={handleToggleEdit}>
+					<EditIcon />
+				</ButtonWithIcon>
+			);
+		}
+
+		if (!isEditable && isEditMode) {
+			return (
+				<ButtonWithIcon onPress={handleEditNote}>
+					<CheckIcon />
+				</ButtonWithIcon>
+			);
+		}
+
+		return (
+			<ButtonWithIcon onPress={handleSubmit}>
+				<CheckIcon />
+			</ButtonWithIcon>
+		);
+	};
+
+	useEffect(() => {
+		if (isEditableValue) {
+			titleInputRef.current?.focus();
+		}
+	}, [isEditableValue]);
+
 	return (
 		<>
 			<Container>
 				<IconsWrapper>
 					<ButtonBack />
-					<ButtonWithIcon onPress={handleSubmit}>
-						<CheckIcon />
-					</ButtonWithIcon>
+					{handleRenderEditButton()}
 				</IconsWrapper>
 				<Input
 					onChangeText={handleChangeTitle}
 					defaultValue={titleValue}
 					multiline
 					maxLength={100}
-					editable={isEditable}
+					autoFocus
+					inputRef={titleInputRef}
+					editable={isEditableValue}
 					placeholder={t("note.title")}
 					textSize={Spacer.EXTRA_LARGE + Spacer.MEDIUM}
 				/>
@@ -95,16 +154,14 @@ export const CreateNoteForm: React.FC<ICreateNoteFormProps> = ({ isEditable }) =
 							onChangeText={handleChangeDescription}
 							defaultValue={descriptionValue}
 							multiline
-							editable={isEditable}
+							editable={isEditableValue}
 							maxLength={500}
 							placeholder={t("note.description")}
 							textSize={Spacer.LARGE}
 						/>
 					)}
 				</InputWrapper>
-				<Title>
-					{t("note.color")}
-				</Title>
+				<Title>{t("note.color")}</Title>
 				{handleRenderInputContainer(
 					<ColorWrapper
 						onPress={handleToggleColorModal}
@@ -112,9 +169,7 @@ export const CreateNoteForm: React.FC<ICreateNoteFormProps> = ({ isEditable }) =
 						style={styles.color}
 					/>
 				)}
-				<Title>
-					{t("note.background")}
-				</Title>
+				<Title>{t("note.background")}</Title>
 				{handleRenderInputContainer(
 					<ColorWrapper
 						onPress={handleToggleBackgroundColorModal}
@@ -156,24 +211,24 @@ const styles = StyleSheet.create({
 const Container = styled.View``;
 
 const IconsWrapper = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: ${Spacer.EXTRA_LARGE}px;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: ${Spacer.EXTRA_LARGE}px;
 `;
 
 const InputWrapper = styled.View`
-  margin-top: ${Spacer.LARGE}px;
+	margin-top: ${Spacer.LARGE}px;
 	margin-bottom: ${Spacer.EXTRA_LARGE}px;
 `;
 
 const Title = styled(Text)`
-  font-size: 10px;
+	font-size: 10px;
 	margin-bottom: ${Spacer.MEDIUM}px;
 	text-transform: uppercase;
 `;
 
-const ColorWrapper = styled.TouchableOpacity<{background: string}>`
+const ColorWrapper = styled.TouchableOpacity<{ background: string }>`
 	width: 100%;
 	height: 40px;
 	background-color: ${({ background }) => background};
