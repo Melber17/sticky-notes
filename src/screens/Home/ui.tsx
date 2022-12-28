@@ -12,14 +12,17 @@ import { RootStackListType } from "..";
 import { RootScreens } from "../config";
 import { useAppSelector } from "../../shared/lib";
 
-export type INavigation = StackNavigationProp<RootStackListType, RootScreens.HOME>;
+export type INavigation = StackNavigationProp<
+	RootStackListType,
+	RootScreens.HOME
+>;
 
 interface IProps {
 	navigation: INavigation;
 }
 
 export const HomeScreen: React.FC<IProps> = ({ navigation }) => {
-	const { data } = useAppSelector(store => store.notes);
+	const { data } = useAppSelector((store) => store.notes);
 
 	const handlePressButton = () => {
 		navigation.push(RootScreens.CREATE_NOTE, { editable: true });
@@ -53,7 +56,6 @@ const styles = StyleSheet.create({
 
 const Container = styled.View`
 	flex: 1;
-	margin: ${Spacer.SMALL}px ${Spacer.MEDIUM}px 0;
 	background: ${(props) => props.theme.colors.background};
 `;
 
@@ -66,5 +68,5 @@ const Button = styled.TouchableOpacity`
 	background: ${(props) => props.theme.colors.background};
 	position: absolute;
 	bottom: ${Spacer.EXTRA_LARGE}px;
-	right: 0px;
+	right: ${Spacer.MEDIUM}px;
 `;

@@ -10,14 +10,14 @@ import { Text } from "../../shared/ui";
 import { INoteResponse } from "./model";
 
 interface INoteCartProps extends INoteResponse {
-  width: number;
+	width: number;
 }
 
 export const NoteCart: React.FC<INoteCartProps> = (props) => {
 	const { title, color } = props;
 	const navigation = useNavigation<INavigation>();
 	const handlePressCart = () => {
-		navigation.push(RootScreens.CREATE_NOTE, { editable: false, note: props },);
+		navigation.push(RootScreens.CREATE_NOTE, { editable: false, note: props });
 	};
 
 	return (
@@ -44,15 +44,15 @@ const styles = StyleSheet.create({
 });
 
 const Container = styled.TouchableOpacity<INoteCartProps>`
-  width: ${({ width }) => width}px;
+	width: ${({ width }) => width}px;
 	height: 120px;
-  background: ${({ backgroundColor }) => backgroundColor};
-  padding: ${Spacer.SMALL}px;
+	background: ${({ backgroundColor }) => backgroundColor};
+	padding: ${Spacer.SMALL}px;
 	border-radius: 10px;
 	margin-bottom: ${Spacer.MEDIUM}px;
 `;
 
-const Title = styled(Text)<{color: string}>`
+const Title = styled(Text)<{ color: string }>`
 	font-size: ${Spacer.LARGE}px;
 	color: ${({ color }) => color};
 `;
