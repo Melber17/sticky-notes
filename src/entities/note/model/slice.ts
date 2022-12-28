@@ -12,21 +12,32 @@ export const notesSlice = createSlice({
 	reducers: {
 		setNote: (state, action: PayloadAction<INote>) => {
 			if (state.data) {
+				const formattedNotes = state.data.map((item, index) => {
+					return {
+						...item,
+						position: index + 1,
+					};
+				});
+
 				state.data = [
 					{
 						...action.payload,
-						id: state.data[0].id + 1
+						id: state.data[0].id + 1,
+						position: 0,
 					},
-					...state.data
+					...formattedNotes,
 				];
 
 				return;
 			}
 
-			state.data = [{
-				...action.payload,
-				id: 0,
-			}];
+			state.data = [
+				{
+					...action.payload,
+					id: 0,
+					position: 0,
+				},
+			];
 		},
 		setNotesData: (state, action: PayloadAction<INoteResponse[]>) => {
 			state.data = action.payload;
@@ -34,7 +45,4 @@ export const notesSlice = createSlice({
 	},
 });
 
-export const {
-	setNote,
-	setNotesData,
-} = notesSlice.actions;
+export const { setNote, setNotesData } = notesSlice.actions;

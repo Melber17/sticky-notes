@@ -7,6 +7,7 @@ export interface INote {
 
 export interface INoteResponse extends INote {
 	id: number;
+	position: number;
 }
 
 export enum NotesThunks {

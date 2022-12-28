@@ -39,14 +39,15 @@ export const getOrder = (
 	tx: number,
 	ty: number,
 	max: number,
-	numberColumns: number
+	numberColumns: number,
+	cardWidth: number
 ) => {
 	"worklet";
 
-	const x = Math.round(tx / SIZE) * SIZE;
-	const y = Math.round(ty / SIZE) * SIZE;
-	const row = Math.max(y, 0) / SIZE;
-	const col = Math.max(x, 0) / SIZE;
+	const x = Math.round(tx / cardWidth) * cardWidth;
+	const y = Math.round(ty / CARD_HEIGHT) * CARD_HEIGHT;
+	const row = Math.max(y, 0) / CARD_HEIGHT;
+	const col = Math.max(x, 0) / cardWidth;
 
 	return Math.min(row * numberColumns + col, max);
 };

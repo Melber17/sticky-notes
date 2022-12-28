@@ -1,5 +1,5 @@
 import React, { ReactNode, RefObject, useMemo } from "react";
-import { Dimensions, StyleSheet, useWindowDimensions } from "react-native";
+import { StyleSheet, useWindowDimensions } from "react-native";
 import Animated, {
 	useAnimatedGestureHandler,
 	useAnimatedStyle,
@@ -17,31 +17,26 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { clamp } from "react-native-redash";
 
-import {
-	animationConfig,
-	CARD_HEIGHT,
-	getOrder,
-	getPosition,
-	Positions,
-} from "../config";
-import { calcCardWidth } from "../../../entities/note";
+import { animationConfig, CARD_HEIGHT, getOrder, getPosition } from "../config";
+import { calcCardWidth, INoteResponse } from "../../../entities/note";
 import { calcNumberColumns } from "../lib";
-import { Spacer } from "../../../shared/config";
 
 interface ItemProps {
 	children: ReactNode;
-	positions: Animated.SharedValue<Positions>;
+	notesData: Animated.SharedValue<INoteResponse[]>;
 	id: number;
+	note: INoteResponse;
 	editing: boolean;
-	onDragEnd: (diffs: Positions) => void;
+	onDragEnd: (diffs: INoteResponse[]) => void;
 	scrollView: RefObject<Animated.ScrollView>;
 	scrollY: Animated.SharedValue<number>;
 }
 
 export const SortableItem = ({
 	children,
-	positions,
+	notesData,
 	id,
+	note,
 	onDragEnd,
 	scrollView,
 	scrollY,
@@ -50,6 +45,7 @@ export const SortableItem = ({
 	const inset = useSafeAreaInsets();
 	const { width, height } = useWindowDimensions();
 	const currentCardWidth = useMemo(() => calcCardWidth(width), [width]);
+
 	const currentNumberColumns = useMemo(
 		() => calcNumberColumns(width, inset.left, inset.right),
 		[width, inset]
@@ -59,21 +55,21 @@ export const SortableItem = ({
 		[height, inset]
 	);
 	const contentHeight =
-		(Object.keys(positions.value).length / currentNumberColumns) *
-		currentCardWidth;
+		(notesData.value.length / currentNumberColumns) * currentCardWidth;
 	const isGestureActive = useSharedValue(false);
 
 	const position = getPosition(
-		positions.value[id]!,
+		notesData.value.find((item) => item.id === id)!.position!,
 		currentCardWidth,
 		CARD_HEIGHT,
 		currentNumberColumns
 	);
+
 	const translateX = useSharedValue(position.x);
 	const translateY = useSharedValue(position.y);
 
 	useAnimatedReaction(
-		() => positions.value[id]!,
+		() => notesData.value.find((item) => item.id === note.id)!.position,
 		(newOrder) => {
 			if (!isGestureActive.value) {
 				const pos = getPosition(
@@ -110,26 +106,44 @@ export const SortableItem = ({
 				const newOrder = getOrder(
 					translateX.value,
 					translateY.value,
-					Object.keys(positions.value).length - 1,
-					currentNumberColumns
+					notesData.value.length - 1,
+					currentNumberColumns,
+					currentCardWidth
 				);
 
 				// 2. We swap the positions
-				const oldOlder = positions.value[id];
+				const oldOlder = notesData.value.find(
+					(item) => item.id === id
+				)!.position;
 
 				if (newOrder !== oldOlder) {
-					const idToSwap = Object.keys(positions.value).find(
-						(key) => positions.value[key] === newOrder
-					);
+					const idToSwap = notesData.value.find(
+						(item) => item.position === newOrder
+					)?.id;
 
 					if (idToSwap) {
-						// Spread operator is not supported in worklets
-						// And Object.assign doesn't seem to be working on alpha.6
-						const newPositions = JSON.parse(JSON.stringify(positions.value));
+						const currentPositions = JSON.parse(
+							JSON.stringify(notesData.value)
+						) as INoteResponse[];
+						const newPositions = currentPositions.map((item) => {
+							const currentNote = item;
 
-						newPositions[id] = newOrder;
-						newPositions[idToSwap] = oldOlder;
-						positions.value = newPositions;
+							if (item.id === id) {
+								currentNote.position = newOrder;
+
+								return currentNote;
+							}
+
+							if (item.id === idToSwap) {
+								currentNote.position = oldOlder;
+
+								return currentNote;
+							}
+
+							return item;
+						});
+
+						notesData.value = newPositions;
 					}
 				}
 
@@ -162,7 +176,7 @@ export const SortableItem = ({
 		},
 		onEnd: () => {
 			const newPosition = getPosition(
-				positions.value[id]!,
+				notesData.value.find((item) => item.id === id)!.position!,
 				currentCardWidth,
 				CARD_HEIGHT,
 				currentNumberColumns
@@ -170,7 +184,7 @@ export const SortableItem = ({
 
 			translateX.value = withTiming(newPosition.x, animationConfig, () => {
 				isGestureActive.value = false;
-				runOnJS(onDragEnd)(positions.value);
+				runOnJS(onDragEnd)(notesData.value);
 			});
 			translateY.value = withTiming(newPosition.y, animationConfig);
 		},

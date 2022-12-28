@@ -1,10 +1,10 @@
-import React, { ReactElement, useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import Animated, {
 	useAnimatedRef,
 	useAnimatedScrollHandler,
 	useSharedValue,
 } from "react-native-reanimated";
-import { useWindowDimensions, View } from "react-native";
+import { useWindowDimensions } from "react-native";
 import styled from "styled-components/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -18,7 +18,7 @@ import { calcNumberColumns } from "../lib";
 interface ListProps {
 	editing: boolean;
 	data: INoteResponse[];
-	onDragEnd: (diff: Positions) => void;
+	onDragEnd: (diff: INoteResponse[]) => void;
 }
 
 export const SortableList = ({ data, editing, onDragEnd }: ListProps) => {
@@ -32,15 +32,19 @@ export const SortableList = ({ data, editing, onDragEnd }: ListProps) => {
 		[width, inset]
 	);
 	const scrollView = useAnimatedRef<Animated.ScrollView>();
-	const positions = useSharedValue<Positions>(
-		Object.assign({}, ...data.map((child, index) => ({ [child.id]: index })))
+	const currentData = data;
+	const notesDataShared = useSharedValue<INoteResponse[]>(
+		JSON.parse(JSON.stringify(currentData))
 	);
 	const onScroll = useAnimatedScrollHandler({
 		onScroll: ({ contentOffset: { y } }) => {
-			console.log("Scroll");
 			scrollY.value = y;
 		},
 	});
+
+	useEffect(() => {
+		notesDataShared.value = JSON.parse(JSON.stringify(data));
+	}, [data]);
 
 	return (
 		<Container
@@ -56,12 +60,13 @@ export const SortableList = ({ data, editing, onDragEnd }: ListProps) => {
 					return (
 						<SortableItem
 							key={item.id}
-							positions={positions}
+							notesData={notesDataShared}
 							id={item.id}
 							editing={editing}
 							onDragEnd={onDragEnd}
 							scrollView={scrollView}
 							scrollY={scrollY}
+							note={item}
 						>
 							<NoteCart width={cartWidth} {...item} key={index} />
 						</SortableItem>
