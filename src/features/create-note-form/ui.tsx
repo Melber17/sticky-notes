@@ -1,23 +1,36 @@
 import React, { useCallback, useState } from "react";
 import styled from "styled-components/native";
 import { useTranslation } from "react-i18next";
+import { useNavigation } from "@react-navigation/native";
+import { StyleSheet } from "react-native";
 
 import { ButtonBack, ButtonWithIcon, Input, Text } from "../../shared/ui";
 import CheckIcon from "../../shared/assets/icons/checkIcon.svg";
-import { Spacer } from "../../shared/config";
+import { BLACK_COLOR, Spacer } from "../../shared/config";
 import { SelectColor } from "../select-color";
+import { useAppDispatch } from "../../shared/lib/useRedux";
+import { setNote } from "../../entities/note";
 
 export const CreateNoteForm: React.FC = () => {
 	const { t } = useTranslation();
+	const dispatch = useAppDispatch();
 	const [isVisibleColorModal, setIsVisibleColorModal] = useState(false);
 	const [isVisibleBackgroundColorModal, setIsVisibleBackgroundColorModal] = useState(false);
 	const [colorValue, setColorValue] = useState("#FFFFFF");
 	const [backgroundColorValue, setBackgroundColorValue] = useState("#444444");
 	const [titleValue, setTitleValue] = useState("");
 	const [descriptionValue, setDescriptionValue] = useState("");
-
+	const navigation = useNavigation();
 	const handleSubmit = () => {
+		const noteResult = {
+			title: titleValue,
+			description: descriptionValue,
+			color: colorValue,
+			backgroundColor: backgroundColorValue
+		};
 
+		dispatch(setNote(noteResult));
+		navigation.goBack();
 	};
 
 	const handleChangeTitle = useCallback((value: string) => {
@@ -66,13 +79,18 @@ export const CreateNoteForm: React.FC = () => {
 				<Title>
 					{t("note.color")}
 				</Title>
-				<ColorWrapper onPress={handleToggleColorModal} background={colorValue}/>
+				<ColorWrapper
+					onPress={handleToggleColorModal}
+					background={colorValue}
+					style={styles.color}
+				/>
 				<Title>
 					{t("note.background")}
 				</Title>
 				<ColorWrapper
 					onPress={handleToggleBackgroundColorModal}
 					background={backgroundColorValue}
+					style={styles.color}
 				/>
 			</Container>
 			<SelectColor
@@ -90,6 +108,20 @@ export const CreateNoteForm: React.FC = () => {
 		</>
 	);
 };
+
+const styles = StyleSheet.create({
+	color: {
+		shadowColor: BLACK_COLOR,
+		shadowOffset: {
+			width: 0,
+			height: 6,
+		},
+		shadowOpacity: 0.39,
+		shadowRadius: 8.3,
+
+		elevation: 13,
+	},
+});
 
 const Container = styled.View``;
 

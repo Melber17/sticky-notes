@@ -22,6 +22,7 @@
 		"react": "18.1.0",
 		"react-i18next": "^12.1.1",
 		"react-native": "0.70.6",
+		"react-native-color-picker": "^0.6.0",
 		"react-native-gesture-handler": "^2.8.0",
 		"react-native-keyboard-aware-scroll-view": "^0.9.5",
 		"react-native-localize": "^2.2.4",
@@ -31,7 +32,6 @@
 		"react-native-splash-screen": "^3.3.0",
 		"react-native-svg": "^13.6.0",
 		"react-native-svg-transformer": "^1.0.0",
-		"react-native-wheel-color-picker": "^1.2.0",
 		"react-redux": "^8.0.5",
 		"redux": "^4.2.0",
 		"styled-components": "^5.3.6"

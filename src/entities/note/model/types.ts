@@ -3,6 +3,9 @@ export interface INote {
   description: string;
   color: string;
   backgroundColor: string;
+}
+
+export interface INoteResponse extends INote {
   id: number;
 }
 

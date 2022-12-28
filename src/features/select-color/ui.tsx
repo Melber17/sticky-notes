@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Animated, { FadeIn } from "react-native-reanimated";
-import ColorPicker from "react-native-wheel-color-picker";
+// import ColorPicker from "react-native-wheel-color-picker";
 import styled from "styled-components/native";
+import { ColorPicker } from "react-native-color-picker";
+import { HoloColorPicker } from "react-native-color-picker/dist/HoloColorPicker";
+import { StyleSheet } from "react-native";
 
-import { Spacer } from "../../shared/config";
+import { BLACK_COLOR, Spacer } from "../../shared/config";
 import { Button, ButtonBack, CustomStatusBar } from "../../shared/ui";
 
 interface IProps {
@@ -17,13 +20,17 @@ interface IProps {
 export const SelectColor: React.FC<IProps> = (props) => {
 	const { t } = useTranslation();
 	const { colorValue, onRequestClose, onChangeColor } = props;
-	const [isLoaded, setIsLoaded] = useState(false);
 
-	useEffect(() => {
-		setTimeout(() => {
-			setIsLoaded(true);
-		}, 500);
-	}, []);
+	const ref = useRef<HoloColorPicker>(null);
+
+	const handleSelectColor = () => {
+		if (ref.current) {
+			const color = ref.current.getColor();
+
+			onChangeColor(color);
+			onRequestClose();
+		}
+	};
 
 	return (
 		<ModalContainer
@@ -34,23 +41,19 @@ export const SelectColor: React.FC<IProps> = (props) => {
 			>
 				<CustomStatusBar />
 				<ButtonBack onPress={onRequestClose} />
-				{isLoaded && (
-					<Wrapper entering={FadeIn}>
-						<ColorPicker
-							color={colorValue}
-							onColorChangeComplete={onChangeColor}
-							thumbSize={30}
-							sliderSize={30}
-							noSnap={true}
-							row={false}
-						/>
-						<ButtonWrapper>
-							<Button onPress={onRequestClose}>
-								{t("note.color")}
-							</Button>
-						</ButtonWrapper>
-					</Wrapper>
-				)}
+				<Wrapper entering={FadeIn}>
+					<ColorPicker
+						ref={ref}
+						style={{ flex: 1 }}
+						defaultColor={colorValue}
+						onColorSelected={handleSelectColor}
+					/>
+					<ButtonWrapper>
+						<Button onPress={handleSelectColor}>
+							{t("note.color")}
+						</Button>
+					</ButtonWrapper>
+				</Wrapper>
 			</Container>
 		</ModalContainer>
 	);

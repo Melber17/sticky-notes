@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { INote } from "./types";
+import { INote, INoteResponse } from "./types";
 
 const initialState = {
-	data: null as Nullable<INote[]>,
+	data: null as Nullable<INoteResponse[]>,
 };
 
 export const notesSlice = createSlice({
@@ -26,7 +26,7 @@ export const notesSlice = createSlice({
 				id: 0,
 			}];
 		},
-		setNotesData: (state, action: PayloadAction<INote[]>) => {
+		setNotesData: (state, action: PayloadAction<INoteResponse[]>) => {
 			state.data = action.payload;
 		},
 	},
