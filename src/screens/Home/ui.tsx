@@ -10,12 +10,15 @@ import { NotesList } from "../../widgets/notes-list";
 import PlusIcon from "../../shared/assets/icons/plusIcon.svg";
 import { RootStackListType } from "..";
 import { RootScreens } from "../config";
+import { useAppSelector } from "../../shared/lib";
 
 interface IProps {
 	navigation: StackNavigationProp<RootStackListType, RootScreens.HOME>;
 }
 
 export const HomeScreen: React.FC<IProps> = ({ navigation }) => {
+	const { data } = useAppSelector(store => store.notes);
+
 	const handlePressButton = () => {
 		navigation.push(RootScreens.CREATE_NOTE);
 	};
@@ -23,8 +26,7 @@ export const HomeScreen: React.FC<IProps> = ({ navigation }) => {
 	return (
 		<WithSafeArea>
 			<Container>
-				<Header />
-				<NotesList data={null} />
+				<NotesList headerComponent={<Header />} data={data} />
 				<Button onPress={handlePressButton} style={styles.button}>
 					<PlusIcon />
 				</Button>
@@ -62,5 +64,5 @@ const Button = styled.TouchableOpacity`
 	background: ${(props) => props.theme.colors.background};
 	position: absolute;
 	bottom: ${Spacer.EXTRA_LARGE}px;
-	right: ${Spacer.SMALL}px;
+	right: 0px;
 `;

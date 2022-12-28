@@ -1,14 +1,14 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import Animated, { FadeIn } from "react-native-reanimated";
-// import ColorPicker from "react-native-wheel-color-picker";
 import styled from "styled-components/native";
 import { ColorPicker } from "react-native-color-picker";
 import { HoloColorPicker } from "react-native-color-picker/dist/HoloColorPicker";
-import { StyleSheet } from "react-native";
+import { Platform } from "react-native";
 
-import { BLACK_COLOR, Spacer } from "../../shared/config";
-import { Button, ButtonBack, CustomStatusBar } from "../../shared/ui";
+import { Spacer } from "../../shared/config";
+import { Button, ButtonBack, WithSafeArea } from "../../shared/ui";
+import { PlatformType } from "../../shared/lib";
 
 interface IProps {
   visible: boolean;
@@ -19,7 +19,7 @@ interface IProps {
 
 export const SelectColor: React.FC<IProps> = (props) => {
 	const { t } = useTranslation();
-	const { colorValue, onRequestClose, onChangeColor } = props;
+	const { onRequestClose, onChangeColor } = props;
 
 	const ref = useRef<HoloColorPicker>(null);
 
@@ -32,29 +32,44 @@ export const SelectColor: React.FC<IProps> = (props) => {
 		}
 	};
 
+	const handleRenderData = useCallback((children: React.ReactNode) => {
+		if (Platform.OS === PlatformType.ANDROID) {
+			return (
+				<>
+					{children}
+				</>
+			);
+		}
+
+		return (
+			<WithSafeArea>
+				{children}
+			</WithSafeArea>
+		);
+	}, []);
+
 	return (
 		<ModalContainer
 			animationType="slide"
 			{...props}>
+			{handleRenderData(
+				<Container>
+					<ButtonBack onPress={onRequestClose} />
+					<Wrapper entering={FadeIn}>
+						<ColorPicker
+							ref={ref}
+							style={{ flex: 1 }}
+							onColorSelected={handleSelectColor}
+						/>
+						<ButtonWrapper>
+							<Button onPress={handleSelectColor}>
+								{t("note.color")}
+							</Button>
+						</ButtonWrapper>
+					</Wrapper>
 
-			<Container
-			>
-				<CustomStatusBar />
-				<ButtonBack onPress={onRequestClose} />
-				<Wrapper entering={FadeIn}>
-					<ColorPicker
-						ref={ref}
-						style={{ flex: 1 }}
-						defaultColor={colorValue}
-						onColorSelected={handleSelectColor}
-					/>
-					<ButtonWrapper>
-						<Button onPress={handleSelectColor}>
-							{t("note.color")}
-						</Button>
-					</ButtonWrapper>
-				</Wrapper>
-			</Container>
+				</Container>
+			)}
 		</ModalContainer>
 	);
 };

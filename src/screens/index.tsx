@@ -6,6 +6,8 @@ import { RootScreens } from "./config";
 import { HomeScreen } from "./Home";
 import i18next from "../shared/lib/i18n";
 import { CreateNoteScreen } from "./CreateNote";
+import { useAppDispatch } from "../shared/lib";
+import { initializeNotesData } from "../entities/note";
 
 export type RootStackListType = {
 	HomeScreen: undefined;
@@ -15,8 +17,16 @@ export type RootStackListType = {
 const Stack = createNativeStackNavigator<RootStackListType>();
 
 export const Routing: React.FC = () => {
-	useEffect(() => {
+	const dispatch = useAppDispatch();
+
+	const handleLaunchApp = async () => {
+		await dispatch(initializeNotesData());
 		SplashScreen.hide();
+
+	};
+
+	useEffect(() => {
+		handleLaunchApp();
 	}, []);
 
 	if (!i18next.isInitialized) {
@@ -32,9 +42,6 @@ export const Routing: React.FC = () => {
 		>
 			<Stack.Screen name={RootScreens.HOME} component={HomeScreen} />
 			<Stack.Screen name={RootScreens.CREATE_NOTE} component={CreateNoteScreen} />
-			{/* <Stack.Group screenOptions={{ presentation: 'modal' }}>
-        <RootStack.Screen name={RootScreens.SELECT_COLOR} component={ModalScreen} />
-      </Stack.Group> */}
 
 		</Stack.Navigator>
 	);

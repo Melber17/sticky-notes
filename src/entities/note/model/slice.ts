@@ -15,10 +15,12 @@ export const notesSlice = createSlice({
 				state.data = [
 					{
 						...action.payload,
-						id: state.data[state.data.length - 1].id + 1
+						id: state.data[0].id + 1
 					},
 					...state.data
 				];
+
+				return;
 			}
 
 			state.data = [{

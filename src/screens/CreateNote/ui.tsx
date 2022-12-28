@@ -9,7 +9,6 @@ import { WithSafeArea } from "../../shared/ui";
 export const CreateNoteScreen: React.FC = () => {
 	return (
 		<WithSafeArea>
-
 			<KeyboardAwareScrollView
 			>
 				<Container>

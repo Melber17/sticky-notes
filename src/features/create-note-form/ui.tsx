@@ -9,7 +9,7 @@ import CheckIcon from "../../shared/assets/icons/checkIcon.svg";
 import { BLACK_COLOR, Spacer } from "../../shared/config";
 import { SelectColor } from "../select-color";
 import { useAppDispatch } from "../../shared/lib/useRedux";
-import { setNote } from "../../entities/note";
+import { createNote } from "../../entities/note";
 
 export const CreateNoteForm: React.FC = () => {
 	const { t } = useTranslation();
@@ -21,7 +21,7 @@ export const CreateNoteForm: React.FC = () => {
 	const [titleValue, setTitleValue] = useState("");
 	const [descriptionValue, setDescriptionValue] = useState("");
 	const navigation = useNavigation();
-	const handleSubmit = () => {
+	const handleSubmit = async () => {
 		const noteResult = {
 			title: titleValue,
 			description: descriptionValue,
@@ -29,7 +29,7 @@ export const CreateNoteForm: React.FC = () => {
 			backgroundColor: backgroundColorValue
 		};
 
-		dispatch(setNote(noteResult));
+		await dispatch(createNote(noteResult));
 		navigation.goBack();
 	};
 
