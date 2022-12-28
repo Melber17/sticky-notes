@@ -10,15 +10,18 @@ interface IProps {
 	onChangeText: (text: string) => void;
   multiline?: boolean;
 	maxLength?: number;
+	editable?: boolean;
 }
 
 export const Input: React.FC<IProps> = (props) => {
+	const { editable = true } = props;
 
 	return (
 		<Field
 			scrollEnabled={false}
 			placeholderTextColor={ PLACEHOLDER_COLOR }
 			{...props}
+			editable={editable}
 		/>
 	);
 };

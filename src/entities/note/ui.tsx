@@ -11,11 +11,11 @@ interface INoteCartProps extends INote {
 }
 
 export const NoteCart: React.FC<INoteCartProps> = (props) => {
-	const { title } = props;
+	const { title, color } = props;
 
 	return (
 		<Container style={styles.cart} {...props}>
-			<Title numberOfLines={3}>
+			<Title color={color} numberOfLines={3}>
 				{title}
 			</Title>
 		</Container>
@@ -45,6 +45,7 @@ const Container = styled.View<INoteCartProps>`
 	margin-bottom: ${Spacer.MEDIUM}px;
 `;
 
-const Title = styled(Text)`
+const Title = styled(Text)<{color: string}>`
 	font-size: ${Spacer.LARGE}px;
+	color: ${({ color }) => color};
 `;

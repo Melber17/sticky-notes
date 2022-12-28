@@ -11,7 +11,11 @@ import { SelectColor } from "../select-color";
 import { useAppDispatch } from "../../shared/lib/useRedux";
 import { createNote } from "../../entities/note";
 
-export const CreateNoteForm: React.FC = () => {
+interface ICreateNoteFormProps {
+	isEditable?: boolean;
+}
+
+export const CreateNoteForm: React.FC<ICreateNoteFormProps> = ({ isEditable }) => {
 	const { t } = useTranslation();
 	const dispatch = useAppDispatch();
 	const [isVisibleColorModal, setIsVisibleColorModal] = useState(false);
@@ -49,6 +53,23 @@ export const CreateNoteForm: React.FC = () => {
 		setIsVisibleBackgroundColorModal(prevValue => !prevValue);
 	};
 
+	const handleRenderInputContainer = (children: React.ReactNode) => {
+		if (isEditable) {
+			return (
+				<>
+					{children}
+				</>
+			);
+		}
+
+		return (
+			<PlugContainer>
+				<PlugView />
+				{children}
+			</PlugContainer>
+		);
+	};
+
 	return (
 		<>
 			<Container>
@@ -63,35 +84,44 @@ export const CreateNoteForm: React.FC = () => {
 					defaultValue={titleValue}
 					multiline
 					maxLength={100}
+					editable={isEditable}
 					placeholder={t("note.title")}
 					textSize={Spacer.EXTRA_LARGE + Spacer.MEDIUM}
 				/>
+
 				<InputWrapper>
-					<Input
-						onChangeText={handleChangeDescription}
-						defaultValue={descriptionValue}
-						multiline
-						maxLength={500}
-						placeholder={t("note.description")}
-						textSize={Spacer.LARGE}
-					/>
+					{handleRenderInputContainer(
+						<Input
+							onChangeText={handleChangeDescription}
+							defaultValue={descriptionValue}
+							multiline
+							editable={isEditable}
+							maxLength={500}
+							placeholder={t("note.description")}
+							textSize={Spacer.LARGE}
+						/>
+					)}
 				</InputWrapper>
 				<Title>
 					{t("note.color")}
 				</Title>
-				<ColorWrapper
-					onPress={handleToggleColorModal}
-					background={colorValue}
-					style={styles.color}
-				/>
+				{handleRenderInputContainer(
+					<ColorWrapper
+						onPress={handleToggleColorModal}
+						background={colorValue}
+						style={styles.color}
+					/>
+				)}
 				<Title>
 					{t("note.background")}
 				</Title>
-				<ColorWrapper
-					onPress={handleToggleBackgroundColorModal}
-					background={backgroundColorValue}
-					style={styles.color}
-				/>
+				{handleRenderInputContainer(
+					<ColorWrapper
+						onPress={handleToggleBackgroundColorModal}
+						background={backgroundColorValue}
+						style={styles.color}
+					/>
+				)}
 			</Container>
 			<SelectColor
 				visible={isVisibleColorModal}
@@ -149,4 +179,17 @@ const ColorWrapper = styled.TouchableOpacity<{background: string}>`
 	background-color: ${({ background }) => background};
 	border-radius: ${Spacer.SMALL}px;
 	margin-bottom: ${Spacer.EXTRA_LARGE}px;
+`;
+
+const PlugContainer = styled.View`
+	position: relative;
+`;
+
+const PlugView = styled.View`
+	position: absolute;
+	z-index: 2;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
 `;

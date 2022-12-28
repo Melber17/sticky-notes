@@ -12,7 +12,7 @@ export const CreateNoteScreen: React.FC = () => {
 			<KeyboardAwareScrollView
 			>
 				<Container>
-					<CreateNoteForm />
+					<CreateNoteForm isEditable={true}/>
 				</Container>
 			</KeyboardAwareScrollView>
 		</WithSafeArea>
