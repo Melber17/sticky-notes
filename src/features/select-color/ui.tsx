@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Modal } from "react-native";
+import Animated, { FadeIn } from "react-native-reanimated";
 import ColorPicker from "react-native-wheel-color-picker";
 import styled from "styled-components/native";
 
 import { Spacer } from "../../shared/config";
-import { Button, ButtonBack } from "../../shared/ui";
+import { Button, ButtonBack, CustomStatusBar } from "../../shared/ui";
 
 interface IProps {
   visible: boolean;
@@ -22,17 +22,20 @@ export const SelectColor: React.FC<IProps> = (props) => {
 	useEffect(() => {
 		setTimeout(() => {
 			setIsLoaded(true);
-		}, 0);
+		}, 500);
 	}, []);
 
 	return (
-		<Modal
+		<ModalContainer
 			animationType="slide"
 			{...props}>
-			<Container>
+
+			<Container
+			>
+				<CustomStatusBar />
 				<ButtonBack onPress={onRequestClose} />
 				{isLoaded && (
-					<>
+					<Wrapper entering={FadeIn}>
 						<ColorPicker
 							color={colorValue}
 							onColorChangeComplete={onChangeColor}
@@ -46,13 +49,16 @@ export const SelectColor: React.FC<IProps> = (props) => {
 								{t("note.color")}
 							</Button>
 						</ButtonWrapper>
-					</>
+					</Wrapper>
 				)}
 			</Container>
-
-		</Modal>
+		</ModalContainer>
 	);
 };
+
+const ModalContainer = styled.Modal`
+	background: ${props => props.theme.colors.background};
+`;
 
 const Container = styled.View`
 	flex: 1;
@@ -62,4 +68,8 @@ const Container = styled.View`
 
 const ButtonWrapper = styled.View`
 	margin-top: ${Spacer.EXTRA_LARGE}px;
+`;
+
+const Wrapper = styled(Animated.View)`
+	flex: 1;
 `;

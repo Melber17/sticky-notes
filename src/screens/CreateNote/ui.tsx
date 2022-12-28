@@ -12,13 +12,11 @@ export const CreateNoteScreen: React.FC = () => {
 
 			<ScrollView
 				showsVerticalScrollIndicator={false}
-				keyboardShouldPersistTaps="never"
+				keyboardShouldPersistTaps="handled"
 			>
 				<Container>
-
 					<CreateNoteForm />
 				</Container>
-
 			</ScrollView>
 		</WithSafeArea>
 	);

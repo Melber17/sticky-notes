@@ -18,11 +18,11 @@ export const Button: React.FC<IProps> = (props) => {
 			backgroundColor={backgroundColor}
 			onPress={onPress}
 		>
-			<Text
+			<Title
 				fontStyle={FontStyles.BOLD}
 			>
 				{children}
-			</Text>
+			</Title>
 		</Wrapper>
 	);
 };
@@ -34,4 +34,8 @@ const Wrapper = styled.TouchableOpacity<{backgroundColor?: string}>`
   align-items: center;
   background-color: ${({ backgroundColor }) => backgroundColor ?? BLUE_COLOR};
   border-radius: ${Spacer.SMALL}px;
+`;
+
+const Title = styled(Text)`
+  text-transform: uppercase;
 `;

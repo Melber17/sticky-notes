@@ -7,8 +7,8 @@ export default {
 		note: {
 			title: "Title",
 			description: "Type something...",
-			color: "Set color",
-			background: "Set background color"
+			color: "Choose color",
+			background: "Choose background"
 		}
 	},
 };
