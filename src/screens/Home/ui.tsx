@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components/native";
 import { StyleSheet } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -11,6 +11,7 @@ import PlusIcon from "../../shared/assets/icons/plusIcon.svg";
 import { RootStackListType } from "..";
 import { RootScreens } from "../config";
 import { useAppSelector } from "../../shared/lib";
+import { NoteOptions } from "../../features/note-options";
 
 export type INavigation = StackNavigationProp<
 	RootStackListType,
@@ -23,20 +24,35 @@ interface IProps {
 
 export const HomeScreen: React.FC<IProps> = ({ navigation }) => {
 	const { data } = useAppSelector((store) => store.notes);
+	const [isVisibleBottomSheet, setIsVisibleBottomSheet] = useState(false);
+
+	const handleToggleVisible = () => {
+		setIsVisibleBottomSheet(prevValue => !prevValue);
+	};
 
 	const handlePressButton = () => {
 		navigation.push(RootScreens.CREATE_NOTE, { editable: true });
 	};
 
 	return (
-		<WithSafeArea>
-			<Container>
-				<NotesList headerComponent={<Header />} data={data} />
-				<Button onPress={handlePressButton} style={styles.button}>
-					<PlusIcon />
-				</Button>
-			</Container>
-		</WithSafeArea>
+		<>
+			<WithSafeArea>
+				<Container>
+					<NotesList
+						onEditCard={handleToggleVisible}
+						headerComponent={<Header />}
+						data={data}
+					/>
+					<Button onPress={handlePressButton} style={styles.button}>
+						<PlusIcon />
+					</Button>
+				</Container>
+
+			</WithSafeArea>
+			{isVisibleBottomSheet && (
+				<NoteOptions onClose={handleToggleVisible} />
+			)}
+		</>
 	);
 };
 

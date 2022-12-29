@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Animated, {
 	useAnimatedRef,
 	useAnimatedScrollHandler,
@@ -21,8 +21,13 @@ interface ListProps {
 	onDragEnd: (diff: INoteResponse[]) => void;
 }
 
-export const SortableList = ({ data, editing, onDragEnd }: ListProps) => {
+export const SortableList = ({
+	data,
+	editing,
+	onDragEnd,
+}: ListProps) => {
 	const scrollY = useSharedValue(0);
+	const [isChangedData, setIsChangedData] = useState(false);
 	const { width } = useWindowDimensions();
 
 	const cartWidth = useMemo(() => calcCardWidth(width), [width]);
@@ -44,6 +49,7 @@ export const SortableList = ({ data, editing, onDragEnd }: ListProps) => {
 
 	useEffect(() => {
 		notesDataShared.value = JSON.parse(JSON.stringify(data));
+		setIsChangedData((prevValue) => !prevValue);
 	}, [data]);
 
 	return (
@@ -56,7 +62,7 @@ export const SortableList = ({ data, editing, onDragEnd }: ListProps) => {
 		>
 			<Header />
 			<ListWrapper>
-				{data.map((item, index) => {
+				{notesDataShared.value.map((item, index) => {
 					return (
 						<SortableItem
 							key={item.id}
@@ -68,7 +74,11 @@ export const SortableList = ({ data, editing, onDragEnd }: ListProps) => {
 							scrollY={scrollY}
 							note={item}
 						>
-							<NoteCart width={cartWidth} {...item} key={index} />
+							<NoteCart
+								width={cartWidth}
+								{...item}
+								key={index}
+							/>
 						</SortableItem>
 					);
 				})}
