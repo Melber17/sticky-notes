@@ -1,16 +1,8 @@
-import { Dimensions } from "react-native";
 import { Easing } from "react-native-reanimated";
 
 import { Spacer } from "../../shared/config";
 
-export interface Positions {
-	[id: string]: number;
-}
-
-const { width } = Dimensions.get("window");
-
 export const MARGIN = Spacer.SMALL;
-export const SIZE = width / 2 - MARGIN;
 export const CARD_HEIGHT = 120;
 
 export const animationConfig = {

@@ -65,8 +65,8 @@ export const SortableItem = ({
 		currentNumberColumns
 	);
 
-	const translateX = useSharedValue(position.x);
-	const translateY = useSharedValue(position.y);
+	const translateX = useSharedValue(position.x ?? 0);
+	const translateY = useSharedValue(position.y ?? 0);
 
 	useAnimatedReaction(
 		() => notesData.value.find((item) => item.id === note.id)!.position,

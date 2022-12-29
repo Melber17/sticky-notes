@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components/native";
 
-import { INoteResponse } from "../../../entities/note";
+import { INoteResponse, setNewNotesData } from "../../../entities/note";
+import { useAppDispatch } from "../../../shared/lib";
 import { Header } from "../../Header";
 import { EmptyListData } from "./EmptyListData";
 import { SortableList } from "./SortableList";
@@ -13,7 +14,10 @@ interface INotesListProps {
 
 export const NotesList: React.FC<INotesListProps> = (props) => {
 	const { data } = props;
-	const [notes, setNotes] = useState(data);
+	const dispatch = useAppDispatch();
+	const onDragEnd = (notesData: INoteResponse[]) => {
+		dispatch(setNewNotesData(notesData));
+	};
 
 	if (!data) {
 		return (
@@ -26,13 +30,7 @@ export const NotesList: React.FC<INotesListProps> = (props) => {
 
 	return (
 		<Container>
-			<SortableList
-				data={data}
-				editing={true}
-				onDragEnd={(positions) =>
-					console.log(JSON.stringify(positions, null, 2))
-				}
-			/>
+			<SortableList data={data} editing={true} onDragEnd={onDragEnd} />
 		</Container>
 	);
 };

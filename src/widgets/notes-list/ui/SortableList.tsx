@@ -9,7 +9,7 @@ import styled from "styled-components/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { SortableItem } from "./SortableItem";
-import { CARD_HEIGHT, Positions } from "../config";
+import { CARD_HEIGHT } from "../config";
 import { Header } from "../../Header";
 import { calcCardWidth, INoteResponse, NoteCart } from "../../../entities/note";
 import { Spacer } from "../../../shared/config";

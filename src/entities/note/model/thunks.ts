@@ -26,6 +26,14 @@ export const initializeNotesData = createAsyncThunk(
 	}
 );
 
+export const setNewNotesData = createAsyncThunk(
+	`notes`,
+	async (notes: INoteResponse[], { dispatch }) => {
+		dispatch(setNotesData(notes));
+		await AsyncStorage.setItem(NotesKeys.NOTES, JSON.stringify(notes));
+	}
+);
+
 export const editNote = createAsyncThunk<any, any, { state: RootState }>(
 	`notes/${NotesThunks.EDIT}`,
 	async (data: INoteResponse, { dispatch, getState }) => {
