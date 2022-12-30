@@ -13,6 +13,7 @@ export interface INoteResponse extends INote {
 export enum NotesThunks {
 	CREATE = "CREATE",
 	EDIT = "EDIT",
+	DELETE = "DELETE"
 }
 
 export enum NotesKeys {

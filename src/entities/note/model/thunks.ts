@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import { RootState } from "../../../app/store";
-import { setNote, setNotesData } from "./slice";
+import { removeNote, setNote, setNotesData } from "./slice";
 import { INote, INoteResponse, NotesKeys, NotesThunks } from "./types";
 
 export const createNote = createAsyncThunk<any, any, { state: RootState }>(
@@ -34,6 +34,16 @@ export const setNewNotesData = createAsyncThunk(
 	}
 );
 
+export const deleteNote = createAsyncThunk<any, any, { state: RootState }>(
+	`notes/${NotesThunks.DELETE}`,
+	async (note: INoteResponse, { dispatch, getState }) => {
+		dispatch(removeNote(note));
+		const currentNotes = getState().notes.data;
+
+		await AsyncStorage.setItem(NotesKeys.NOTES, JSON.stringify(currentNotes));
+	}
+);
+
 export const editNote = createAsyncThunk<any, any, { state: RootState }>(
 	`notes/${NotesThunks.EDIT}`,
 	async (data: INoteResponse, { dispatch, getState }) => {
@@ -50,7 +60,7 @@ export const editNote = createAsyncThunk<any, any, { state: RootState }>(
 
 			dispatch(setNotesData(result));
 
-			await AsyncStorage.setItem(NotesKeys.NOTES, JSON.stringify(currentNotes));
+			await AsyncStorage.setItem(NotesKeys.NOTES, JSON.stringify(result));
 		}
 	}
 );

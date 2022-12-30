@@ -66,6 +66,7 @@ export const CreateNoteForm: React.FC<ICreateNoteFormProps> = ({
 				color: colorValue,
 				backgroundColor: backgroundColorValue,
 				id: note.id,
+				position: note.position
 			};
 
 			await dispatch(editNote(noteResult));

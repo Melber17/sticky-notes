@@ -1,92 +1,72 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import Animated, {
 	useAnimatedRef,
-	useAnimatedScrollHandler,
 	useSharedValue,
 } from "react-native-reanimated";
 import { useWindowDimensions } from "react-native";
 import styled from "styled-components/native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { SortableItem } from "./SortableItem";
 import { CARD_HEIGHT } from "../config";
-import { Header } from "../../Header";
 import { calcCardWidth, INoteResponse, NoteCart } from "../../../entities/note";
 import { Spacer } from "../../../shared/config";
 import { calcNumberColumns } from "../lib";
 
 interface ListProps {
+	isChangedData: boolean;
+	notesData: Animated.SharedValue<INoteResponse[]>;
+	onDragEnd: (diff: INoteResponse[]) => void;
 	editing: boolean;
 	data: INoteResponse[];
-	onDragEnd: (diff: INoteResponse[]) => void;
 }
 
-export const SortableList = ({
+const SortableList = ({
+	onDragEnd,
+	notesData,
 	data,
 	editing,
-	onDragEnd,
 }: ListProps) => {
 	const scrollY = useSharedValue(0);
-	const [isChangedData, setIsChangedData] = useState(false);
 	const { width } = useWindowDimensions();
 
 	const cartWidth = useMemo(() => calcCardWidth(width), [width]);
-	const inset = useSafeAreaInsets();
-	const currentNumberColumns = useMemo(
-		() => calcNumberColumns(width, inset.left, inset.right),
-		[width, inset]
-	);
-	const scrollView = useAnimatedRef<Animated.ScrollView>();
-	const currentData = data;
-	const notesDataShared = useSharedValue<INoteResponse[]>(
-		JSON.parse(JSON.stringify(currentData))
-	);
-	const onScroll = useAnimatedScrollHandler({
-		onScroll: ({ contentOffset: { y } }) => {
-			scrollY.value = y;
-		},
-	});
 
-	useEffect(() => {
-		notesDataShared.value = JSON.parse(JSON.stringify(data));
-		setIsChangedData((prevValue) => !prevValue);
-	}, [data]);
+	const scrollView = useAnimatedRef<Animated.ScrollView>();
 
 	return (
-		<Container
-			onScroll={onScroll}
-			ref={scrollView}
-			showsVerticalScrollIndicator={false}
-			bounces={false}
-			scrollEventThrottle={16}
-		>
-			<Header />
-			<ListWrapper>
-				{notesDataShared.value.map((item, index) => {
-					return (
-						<SortableItem
-							key={item.id}
-							notesData={notesDataShared}
-							id={item.id}
-							editing={editing}
-							onDragEnd={onDragEnd}
-							scrollView={scrollView}
-							scrollY={scrollY}
-							note={item}
-						>
-							<NoteCart
-								width={cartWidth}
-								{...item}
-								key={index}
-							/>
-						</SortableItem>
-					);
-				})}
-			</ListWrapper>
-			<Block dataLength={data.length / currentNumberColumns} />
-		</Container>
+		<ListWrapper>
+			{data.map((item, index) => {
+				return (
+					<SortableItem
+						key={item.id}
+						data={data}
+						notesData={notesData}
+						id={item.id}
+						editing={editing}
+						onDragEnd={onDragEnd}
+						scrollView={scrollView}
+						scrollY={scrollY}
+						note={item}
+					>
+						<NoteCart
+							width={cartWidth}
+							{...item}
+							key={index}
+						/>
+					</SortableItem>
+				);
+			})}
+		</ListWrapper>
 	);
 };
+
+export default React.memo(SortableList, (prevProps, nextProps) => {
+	if (prevProps.isChangedData !== nextProps.isChangedData) {
+		return false;
+	} else {
+		return true;
+	}
+});
 
 const Container = styled(Animated.ScrollView)`
 	flex: 1;
@@ -95,9 +75,4 @@ const Container = styled(Animated.ScrollView)`
 
 const ListWrapper = styled.View`
 	margin-top: ${Spacer.MEDIUM}px;
-`;
-
-const Block = styled.View<{ dataLength: number }>`
-	z-index: -1;
-	height: ${({ dataLength }) => dataLength * CARD_HEIGHT * 1.5}px;
 `;

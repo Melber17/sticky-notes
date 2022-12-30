@@ -25,6 +25,7 @@ interface ItemProps {
 	children: ReactNode;
 	notesData: Animated.SharedValue<INoteResponse[]>;
 	id: number;
+	data: INoteResponse[];
 	note: INoteResponse;
 	editing: boolean;
 	onDragEnd: (diffs: INoteResponse[]) => void;
@@ -35,6 +36,7 @@ interface ItemProps {
 export const SortableItem = ({
 	children,
 	notesData,
+	data,
 	id,
 	note,
 	onDragEnd,
@@ -42,6 +44,7 @@ export const SortableItem = ({
 	scrollY,
 	editing,
 }: ItemProps) => {
+
 	const inset = useSafeAreaInsets();
 	const { width, height } = useWindowDimensions();
 	const currentCardWidth = useMemo(() => calcCardWidth(width), [width]);
@@ -59,7 +62,7 @@ export const SortableItem = ({
 	const isGestureActive = useSharedValue(false);
 
 	const position = getPosition(
-		notesData.value.find((item) => item.id === id)!.position!,
+		data.find((item) => item.id === id)!.position!,
 		currentCardWidth,
 		CARD_HEIGHT,
 		currentNumberColumns
@@ -69,11 +72,13 @@ export const SortableItem = ({
 	const translateY = useSharedValue(position.y ?? 0);
 
 	useAnimatedReaction(
-		() => notesData.value.find((item) => item.id === note.id)!.position,
+		() => {
+			return notesData.value.find((item) => item.id === note.id)?.position;
+		},
 		(newOrder) => {
 			if (!isGestureActive.value) {
 				const pos = getPosition(
-					newOrder,
+					newOrder ?? note.position,
 					currentCardWidth,
 					CARD_HEIGHT,
 					currentNumberColumns

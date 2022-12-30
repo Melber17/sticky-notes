@@ -8,7 +8,9 @@ export default {
 			title: "Название",
 			description: "Введите что-нибудь...",
 			color: "Установить цвет",
-			background: "Установить цвет фона"
+			background: "Установить цвет фона",
+			reminder: "Установить напоминание",
+			emptyReminder: "Не установлен",
 		}
 	},
 };

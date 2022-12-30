@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components/native";
 
 import { INoteResponse, setNewNotesData } from "../../../entities/note";
-import { NoteOptions } from "../../../features/note-options";
+import { Spacer } from "../../../shared/config";
 import { useAppDispatch } from "../../../shared/lib";
 import { Header } from "../../Header";
 import { EmptyListData } from "./EmptyListData";
-import { SortableList } from "./SortableList";
+import { SortableListWrapper } from "./SortableListWrapper";
 
 interface INotesListProps {
 	data: Nullable<INoteResponse[]>;
@@ -20,19 +20,19 @@ export const NotesList: React.FC<INotesListProps> = (props) => {
 		dispatch(setNewNotesData(notesData));
 	};
 
-	if (!data) {
+	if (!data || !data.length) {
 		return (
-			<>
+			<Wrapper>
 				<Header />
 				<EmptyListData />
-			</>
+			</Wrapper>
 		);
 	}
 
 	return (
 		<>
 			<Container>
-				<SortableList
+				<SortableListWrapper
 					data={data}
 					editing={true}
 					onDragEnd={onDragEnd}
@@ -43,5 +43,10 @@ export const NotesList: React.FC<INotesListProps> = (props) => {
 };
 
 const Container = styled.View`
+	flex: 1;
+`;
+
+const Wrapper = styled.View`
+	margin: ${Spacer.MEDIUM}px;
 	flex: 1;
 `;

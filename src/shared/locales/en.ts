@@ -8,7 +8,9 @@ export default {
 			title: "Title",
 			description: "Type something...",
 			color: "Choose color",
-			background: "Choose background"
+			background: "Choose background",
+			reminder: "Set Reminder",
+			emptyReminder: "Not Set",
 		}
 	},
 };
