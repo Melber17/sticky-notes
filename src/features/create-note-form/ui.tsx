@@ -11,15 +11,18 @@ import { SelectColor } from "../select-color";
 import { useAppDispatch } from "../../shared/lib/useRedux";
 import { createNote, editNote, INoteResponse } from "../../entities/note";
 import EditIcon from "../../shared/assets/icons/editIcon.svg";
+import ThreeDotsIcon from "../../shared/assets/icons/threeDotsIcon.svg";
 
 interface ICreateNoteFormProps {
 	isEditable?: boolean;
 	note?: INoteResponse;
+	onPressOptions: () => void;
 }
 
 export const CreateNoteForm: React.FC<ICreateNoteFormProps> = ({
 	isEditable,
 	note,
+	onPressOptions,
 }) => {
 	const { t } = useTranslation();
 	const dispatch = useAppDispatch();
@@ -102,17 +105,32 @@ export const CreateNoteForm: React.FC<ICreateNoteFormProps> = ({
 	const handleRenderEditButton = () => {
 		if (!isEditable && !isEditMode) {
 			return (
-				<ButtonWithIcon onPress={handleToggleEdit}>
-					<EditIcon />
-				</ButtonWithIcon>
+				<Row>
+					<ButtonWithIcon onPress={handleToggleEdit}>
+						<EditIcon />
+					</ButtonWithIcon>
+					<ButtonWrapper>
+						<ButtonWithIcon onPress={onPressOptions}>
+							<ThreeDotsIcon />
+						</ButtonWithIcon>
+					</ButtonWrapper>
+				</Row>
 			);
 		}
 
 		if (!isEditable && isEditMode) {
 			return (
-				<ButtonWithIcon onPress={handleEditNote}>
-					<CheckIcon />
-				</ButtonWithIcon>
+				<Row>
+					<ButtonWithIcon onPress={handleEditNote}>
+						<CheckIcon />
+					</ButtonWithIcon>
+					<ButtonWrapper>
+						<ButtonWithIcon onPress={onPressOptions}>
+							<ThreeDotsIcon />
+						</ButtonWithIcon>
+					</ButtonWrapper>
+
+				</Row>
 			);
 		}
 
@@ -247,4 +265,12 @@ const PlugView = styled.View`
 	bottom: 0;
 	right: 0;
 	left: 0;
+`;
+
+const Row = styled.View`
+	flex-direction: row;
+`;
+
+const ButtonWrapper = styled.View`
+	margin-left: ${Spacer.MEDIUM}px;
 `;

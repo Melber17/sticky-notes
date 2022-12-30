@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef } from "react";
+import React, { useCallback, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import Animated, { FadeIn } from "react-native-reanimated";
 import styled from "styled-components/native";
@@ -19,7 +19,6 @@ interface IProps {
 
 export const SelectColor: React.FC<IProps> = (props) => {
 	const { t } = useTranslation();
-	const defaultColorValue = useMemo(() => props.colorValue, []);
 	const { onRequestClose, onChangeColor } = props;
 
 	const ref = useRef<HoloColorPicker>(null);
@@ -49,7 +48,6 @@ export const SelectColor: React.FC<IProps> = (props) => {
 					<Wrapper entering={FadeIn}>
 						<ColorPicker
 							ref={ref}
-							defaultColor={defaultColorValue}
 							style={{ flex: 1 }}
 							onColorSelected={handleSelectColor}
 						/>

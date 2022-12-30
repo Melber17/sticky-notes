@@ -73,7 +73,7 @@ export const WithBottomSheet: React.FC<IProps> = (props) => {
 	return (
 		<Container style={[animatedStyles]}>
 			<CustomStatusBar
-				barStyle="dark-content"
+				barStyle="light-content"
 				backgroundColor="transparent"
 				translucent
 				backgroundColorWrapper={animatedStyles}

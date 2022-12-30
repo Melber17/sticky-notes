@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { RouteProp } from "@react-navigation/native";
@@ -8,24 +8,37 @@ import { Spacer } from "../../shared/config";
 import { WithSafeArea } from "../../shared/ui";
 import { RootStackListType } from "..";
 import { RootScreens } from "../config";
+import { NoteOptions } from "../../features/note-options";
 
 interface IProps {
 	route: RouteProp<RootStackListType, RootScreens.CREATE_NOTE>
 }
 
 export const CreateNoteScreen: React.FC<IProps> = ({ route }) => {
+	const [isVisibleBottomSheet, setIsVisibleBottomSheet] = useState(false);
+
+	const handleToggleVisible = () => {
+		setIsVisibleBottomSheet(prevValue => !prevValue);
+	};
+
 	return (
-		<WithSafeArea>
-			<KeyboardAwareScrollView
-			>
-				<Container>
-					<CreateNoteForm
-						isEditable={route.params.editable}
-						note={route.params.note}
-					/>
-				</Container>
-			</KeyboardAwareScrollView>
-		</WithSafeArea>
+		<>
+			<WithSafeArea>
+				<KeyboardAwareScrollView
+				>
+					<Container>
+						<CreateNoteForm
+							isEditable={route.params.editable}
+							onPressOptions={handleToggleVisible}
+							note={route.params.note}
+						/>
+					</Container>
+				</KeyboardAwareScrollView>
+			</WithSafeArea>
+			{isVisibleBottomSheet && route.params.note && (
+				<NoteOptions note={route.params.note} onClose={handleToggleVisible} />
+			)}
+		</>
 	);
 };
 

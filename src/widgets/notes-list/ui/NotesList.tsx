@@ -11,18 +11,13 @@ import { SortableList } from "./SortableList";
 interface INotesListProps {
 	data: Nullable<INoteResponse[]>;
 	headerComponent: JSX.Element;
-	onEditCard: () => void;
 }
 
 export const NotesList: React.FC<INotesListProps> = (props) => {
-	const { data, onEditCard } = props;
+	const { data } = props;
 	const dispatch = useAppDispatch();
 	const onDragEnd = (notesData: INoteResponse[]) => {
 		dispatch(setNewNotesData(notesData));
-	};
-
-	const handlePressCard = () => {
-
 	};
 
 	if (!data) {

@@ -5,3 +5,6 @@ export const GRAY_COLOR = "#3B3B3B";
 export const PLACEHOLDER_COLOR = "#9A9A9A";
 export const BLUE_COLOR = "#566AEC";
 export const LIGHT_GRAY_COLOR = "#EFEEF0";
+export const DARK_GRAY_COLOR = "#333333";
+export const DARK_PURPLE_COLOR = "#827D89";
+export const RED_COLOR = "#CE3A54";
