@@ -16,6 +16,7 @@ export const notesSlice = createSlice({
 					return {
 						...item,
 						position: index + 1,
+						reminder: null
 					};
 				});
 
@@ -24,6 +25,8 @@ export const notesSlice = createSlice({
 						...action.payload,
 						id: state.data[0].id + 1,
 						position: 0,
+						reminder: null
+
 					},
 					...formattedNotes,
 				];
@@ -36,6 +39,8 @@ export const notesSlice = createSlice({
 					...action.payload,
 					id: 0,
 					position: 0,
+					reminder: null
+
 				},
 			];
 		},

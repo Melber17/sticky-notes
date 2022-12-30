@@ -1,11 +1,13 @@
 import BottomSheet from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheet/BottomSheet";
-import React, { useMemo, useRef } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import styled from "styled-components/native";
 import { StyleSheet } from "react-native";
 import { useTranslation } from "react-i18next";
 import { useNavigation } from "@react-navigation/native";
+import DatePicker from "react-native-date-picker";
+import PushNotificationIOS from "@react-native-community/push-notification-ios";
 
-import { deleteNote, INoteResponse, removeNote } from "../../entities/note";
+import { deleteNote, INoteResponse } from "../../entities/note";
 import { Text, WithBottomSheet } from "../../shared/ui";
 import
 { BLACK_COLOR, DARK_PURPLE_COLOR, FontStyles, LIGHT_GRAY_COLOR, RED_COLOR, Spacer }
@@ -13,7 +15,7 @@ import
 import ClockIcon from "../../shared/assets/icons/clockIcon.svg";
 import TrashIcon from "../../shared/assets/icons/trashIcon.svg";
 import ArrowRightIcon from "../../shared/assets/icons/arrowRight.svg";
-import { useAppDispatch } from "../../shared/lib";
+import { formatCreatedDate, useAppDispatch } from "../../shared/lib";
 
 interface INoteOptionsProps {
   onClose: () => void;
@@ -23,6 +25,8 @@ interface INoteOptionsProps {
 export const NoteOptions: React.FC<INoteOptionsProps> = ({ onClose, note }) => {
 	const bottomSheetRef = useRef<BottomSheet>(null);
 	const { t } = useTranslation();
+	const [isOpenDatePicker, setIsOpenDatePicker] = useState(false);
+	const [reminderDate, setReminderDate] = useState(new Date());
 	const snapPoints = useMemo(() => ["25%"], []);
 	const navigation = useNavigation();
 	const dispatch = useAppDispatch();
@@ -33,6 +37,40 @@ export const NoteOptions: React.FC<INoteOptionsProps> = ({ onClose, note }) => {
 		navigation.goBack();
 	};
 
+	const handleToggleDatePicker = () => {
+		setIsOpenDatePicker(prevValue => !prevValue);
+	};
+
+	const handleConfirmDatePicker = (date: Date) => {
+		handleToggleDatePicker();
+		setReminderDate(date);
+
+		PushNotificationIOS.addNotificationRequest({
+			id: `${Math.random() * 10000}`,
+			title: note.title,
+			subtitle: note.description,
+			fireDate: reminderDate
+		});
+	};
+
+	const handleRenderDateValue = () => {
+		if (reminderDate) {
+			return (
+				<SubTitle
+				>
+					{formatCreatedDate(reminderDate)}
+				</SubTitle>
+			);
+		}
+
+		return (
+			<SubTitle
+			>
+				{t("note.emptyReminder")}
+			</SubTitle>
+		);
+	};
+
 	return (
 		<WithBottomSheet
 			bottomSheetRef={bottomSheetRef}
@@ -40,7 +78,7 @@ export const NoteOptions: React.FC<INoteOptionsProps> = ({ onClose, note }) => {
 			handleCloseSheet={onClose}
 			snapPoints={snapPoints}>
 			<Container>
-				<OptionContainer style={styles.button}>
+				<OptionContainer onPress={handleToggleDatePicker} style={styles.button}>
 					<ClockIcon />
 					<ReminderTitle
 						fontStyle={FontStyles.BOLD}
@@ -48,10 +86,7 @@ export const NoteOptions: React.FC<INoteOptionsProps> = ({ onClose, note }) => {
 						{t("note.reminder")}
 					</ReminderTitle>
 					<Row>
-						<SubTitle
-						>
-							{t("note.emptyReminder")}
-						</SubTitle>
+						{handleRenderDateValue()}
 						<ArrowRightIcon />
 					</Row>
 				</OptionContainer>
@@ -64,6 +99,13 @@ export const NoteOptions: React.FC<INoteOptionsProps> = ({ onClose, note }) => {
 					</TrashTitle>
 				</OptionContainer>
 			</Container>
+			<DatePicker
+				modal
+				open={isOpenDatePicker}
+				date={reminderDate}
+				onConfirm={handleConfirmDatePicker}
+				onCancel={handleToggleDatePicker}
+			/>
 		</WithBottomSheet>
 	);
 };

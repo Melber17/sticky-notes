@@ -21,7 +21,20 @@ export const initializeNotesData = createAsyncThunk(
 		const notesData = await AsyncStorage.getItem(NotesKeys.NOTES);
 
 		if (notesData) {
-			dispatch(setNotesData(JSON.parse(notesData)));
+			const currentNotes = JSON.parse(notesData) as INoteResponse[];
+			const currentDate = new Date();
+			const filteredNotes = currentNotes.map(item => {
+				if (item.reminder && item.reminder < currentDate) {
+					return {
+						...item,
+						reminder: null
+					};
+				}
+
+				return item;
+			});
+
+			dispatch(setNotesData(filteredNotes));
 		}
 	}
 );
