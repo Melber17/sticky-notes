@@ -1,11 +1,12 @@
 import BottomSheet from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheet/BottomSheet";
-import React, { useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import styled from "styled-components/native";
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 import { useTranslation } from "react-i18next";
 import { useNavigation } from "@react-navigation/native";
 import DatePicker from "react-native-date-picker";
 import PushNotificationIOS from "@react-native-community/push-notification-ios";
+import PushNotification from "react-native-push-notification";
 
 import { deleteNote, INoteResponse } from "../../entities/note";
 import { Text, WithBottomSheet } from "../../shared/ui";
@@ -15,7 +16,7 @@ import
 import ClockIcon from "../../shared/assets/icons/clockIcon.svg";
 import TrashIcon from "../../shared/assets/icons/trashIcon.svg";
 import ArrowRightIcon from "../../shared/assets/icons/arrowRight.svg";
-import { formatCreatedDate, useAppDispatch } from "../../shared/lib";
+import { formatCreatedDate, PlatformType, useAppDispatch } from "../../shared/lib";
 
 interface INoteOptionsProps {
   onClose: () => void;
@@ -44,12 +45,22 @@ export const NoteOptions: React.FC<INoteOptionsProps> = ({ onClose, note }) => {
 	const handleConfirmDatePicker = (date: Date) => {
 		handleToggleDatePicker();
 		setReminderDate(date);
+		if (Platform.OS === PlatformType.IOS) {
+			PushNotificationIOS.addNotificationRequest({
+				id: `${Math.random() * 10000}`,
+				title: note.title,
+				subtitle: note.description,
+				fireDate: reminderDate
+			});
 
-		PushNotificationIOS.addNotificationRequest({
-			id: `${Math.random() * 10000}`,
+			return;
+		}
+
+		PushNotification.localNotificationSchedule({
 			title: note.title,
-			subtitle: note.description,
-			fireDate: reminderDate
+			channelId: "notes-channel",
+			message: note.description,
+			date: date
 		});
 	};
 
@@ -70,6 +81,10 @@ export const NoteOptions: React.FC<INoteOptionsProps> = ({ onClose, note }) => {
 			</SubTitle>
 		);
 	};
+
+	useEffect(() => {
+		// createNotificationsChannel();
+	}, []);
 
 	return (
 		<WithBottomSheet

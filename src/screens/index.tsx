@@ -2,6 +2,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React, { useEffect } from "react";
 import SplashScreen from "react-native-splash-screen";
 import PushNotification from "react-native-push-notification";
+import { Platform } from "react-native";
 
 import { RootScreens } from "./config";
 import { HomeScreen } from "./Home";
@@ -33,13 +34,17 @@ export const Routing: React.FC = () => {
 	useEffect(() => {
 
 		PushNotification.configure({
+			onNotification: function (notification) {
+				console.log("LOCAL NOTIFICATION ==>", notification);
+			},
+
 			permissions: {
 				alert: true,
 				badge: true,
 				sound: true,
 			},
 			popInitialNotification: true,
-			requestPermissions: true,
+			requestPermissions: Platform.OS === "ios",
 		});
 	}, []);
 
