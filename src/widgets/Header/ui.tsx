@@ -1,20 +1,19 @@
 import React, { useState } from "react";
 import styled from "styled-components/native";
 import { useTranslation } from "react-i18next";
-import Voice, {
-	SpeechResultsEvent,
-} from "@react-native-voice/voice";
+import Voice, { SpeechResultsEvent } from "@react-native-voice/voice";
 
-import { ButtonWithIcon, Text } from "../../shared/ui";
+import { ButtonWithIcon, CustomModal, Text } from "../../shared/ui";
 import InfoIcon from "../../shared/assets/icons/InfoIcon.svg";
 import MicrophoneIcon from "../../shared/assets/icons/microphoneIcon.svg";
 import { Spacer } from "../../shared/config";
+import { AppInformation } from "../AppInformation";
 
 export const Header: React.FC = () => {
 	const textValue = React.useRef("");
 	const [isListening, setIsListening] = useState(false);
 	const { t } = useTranslation();
-
+	const [isOpenModal, setIsOpenModal] = useState(false);
 	const splitLastWords = (sentence: string, lastWordsCount: number) =>
 		sentence.split(" ").splice(-lastWordsCount).join().toLocaleLowerCase();
 
@@ -29,10 +28,8 @@ export const Header: React.FC = () => {
 			textValue.current = text;
 			const lastWord = splitLastWords(text, 1);
 
-			console.log("lastworkd", lastWord);
 			switch (lastWord) {
 			case "note":
-				console.log("Yeah");
 			default:
 				break;
 			}
@@ -55,7 +52,6 @@ export const Header: React.FC = () => {
 	}, []);
 
 	async function toggleListening () {
-
 		if (isListening) {
 			stopSpeech();
 		} else {
@@ -64,26 +60,26 @@ export const Header: React.FC = () => {
 		}
 	}
 
-	const handlePressShowInfo = () => {
-
+	const handleToggleInfo = () => {
+		setIsOpenModal((prevValue) => !prevValue);
 	};
 
 	return (
 		<Container>
-			<Text size={40}>
-				{t("general.title")}
-			</Text>
+			<Text size={40}>{t("general.title")}</Text>
 			<Row>
 				<ButtonWrapper>
 					<ButtonWithIcon onPress={toggleListening}>
 						<MicrophoneIcon />
 					</ButtonWithIcon>
 				</ButtonWrapper>
-				<ButtonWithIcon onPress={handlePressShowInfo}>
+				<ButtonWithIcon onPress={handleToggleInfo}>
 					<InfoIcon />
 				</ButtonWithIcon>
 			</Row>
-
+			<CustomModal isVisible={isOpenModal} onClose={handleToggleInfo}>
+				<AppInformation />
+			</CustomModal>
 		</Container>
 	);
 };

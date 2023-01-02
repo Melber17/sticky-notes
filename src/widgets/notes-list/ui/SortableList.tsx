@@ -7,10 +7,8 @@ import { useWindowDimensions } from "react-native";
 import styled from "styled-components/native";
 
 import { SortableItem } from "./SortableItem";
-import { CARD_HEIGHT } from "../config";
 import { calcCardWidth, INoteResponse, NoteCart } from "../../../entities/note";
 import { Spacer } from "../../../shared/config";
-import { calcNumberColumns } from "../lib";
 
 interface ListProps {
 	isChangedData: boolean;
@@ -20,12 +18,7 @@ interface ListProps {
 	data: INoteResponse[];
 }
 
-const SortableList = ({
-	onDragEnd,
-	notesData,
-	data,
-	editing,
-}: ListProps) => {
+const SortableList = ({ onDragEnd, notesData, data, editing }: ListProps) => {
 	const scrollY = useSharedValue(0);
 	const { width } = useWindowDimensions();
 
@@ -48,11 +41,7 @@ const SortableList = ({
 						scrollY={scrollY}
 						note={item}
 					>
-						<NoteCart
-							width={cartWidth}
-							{...item}
-							key={index}
-						/>
+						<NoteCart width={cartWidth} {...item} key={index} />
 					</SortableItem>
 				);
 			})}

@@ -1,5 +1,5 @@
 import BottomSheet from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheet/BottomSheet";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import styled from "styled-components/native";
 import { Platform, StyleSheet } from "react-native";
 import { useTranslation } from "react-i18next";
@@ -8,18 +8,27 @@ import DatePicker from "react-native-date-picker";
 import PushNotificationIOS from "@react-native-community/push-notification-ios";
 import PushNotification from "react-native-push-notification";
 
-import { deleteNote, INoteResponse } from "../../entities/note";
+import { deleteNote, editNote, INoteResponse } from "../../entities/note";
 import { Text, WithBottomSheet } from "../../shared/ui";
-import
-{ BLACK_COLOR, DARK_PURPLE_COLOR, FontStyles, LIGHT_GRAY_COLOR, RED_COLOR, Spacer }
-	from "../../shared/config";
+import {
+	BLACK_COLOR,
+	DARK_PURPLE_COLOR,
+	FontStyles,
+	LIGHT_GRAY_COLOR,
+	RED_COLOR,
+	Spacer,
+} from "../../shared/config";
 import ClockIcon from "../../shared/assets/icons/clockIcon.svg";
 import TrashIcon from "../../shared/assets/icons/trashIcon.svg";
 import ArrowRightIcon from "../../shared/assets/icons/arrowRight.svg";
-import { formatCreatedDate, PlatformType, useAppDispatch } from "../../shared/lib";
+import {
+	formatCreatedDate,
+	PlatformType,
+	useAppDispatch,
+} from "../../shared/lib";
 
 interface INoteOptionsProps {
-  onClose: () => void;
+	onClose: () => void;
 	note: INoteResponse;
 }
 
@@ -27,7 +36,7 @@ export const NoteOptions: React.FC<INoteOptionsProps> = ({ onClose, note }) => {
 	const bottomSheetRef = useRef<BottomSheet>(null);
 	const { t } = useTranslation();
 	const [isOpenDatePicker, setIsOpenDatePicker] = useState(false);
-	const [reminderDate, setReminderDate] = useState(new Date());
+	const [reminderDate, setReminderDate] = useState(note.reminder);
 	const snapPoints = useMemo(() => ["25%"], []);
 	const navigation = useNavigation();
 	const dispatch = useAppDispatch();
@@ -39,7 +48,7 @@ export const NoteOptions: React.FC<INoteOptionsProps> = ({ onClose, note }) => {
 	};
 
 	const handleToggleDatePicker = () => {
-		setIsOpenDatePicker(prevValue => !prevValue);
+		setIsOpenDatePicker((prevValue) => !prevValue);
 	};
 
 	const handleConfirmDatePicker = (date: Date) => {
@@ -50,54 +59,44 @@ export const NoteOptions: React.FC<INoteOptionsProps> = ({ onClose, note }) => {
 				id: `${Math.random() * 10000}`,
 				title: note.title,
 				subtitle: note.description,
-				fireDate: reminderDate
+				fireDate: date,
 			});
-
-			return;
+		} else {
+			PushNotification.localNotificationSchedule({
+				title: note.title,
+				channelId: "notes-channel",
+				message: note.description,
+				date: date,
+			});
 		}
 
-		PushNotification.localNotificationSchedule({
-			title: note.title,
-			channelId: "notes-channel",
-			message: note.description,
-			date: date
-		});
+		dispatch(
+			editNote({
+				...note,
+				reminder: date,
+			})
+		);
 	};
 
 	const handleRenderDateValue = () => {
 		if (reminderDate) {
-			return (
-				<SubTitle
-				>
-					{formatCreatedDate(reminderDate)}
-				</SubTitle>
-			);
+			return <SubTitle>{formatCreatedDate(reminderDate)}</SubTitle>;
 		}
 
-		return (
-			<SubTitle
-			>
-				{t("note.emptyReminder")}
-			</SubTitle>
-		);
+		return <SubTitle>{t("note.emptyReminder")}</SubTitle>;
 	};
-
-	useEffect(() => {
-		// createNotificationsChannel();
-	}, []);
 
 	return (
 		<WithBottomSheet
 			bottomSheetRef={bottomSheetRef}
 			index={0}
 			handleCloseSheet={onClose}
-			snapPoints={snapPoints}>
+			snapPoints={snapPoints}
+		>
 			<Container>
 				<OptionContainer onPress={handleToggleDatePicker} style={styles.button}>
 					<ClockIcon />
-					<ReminderTitle
-						fontStyle={FontStyles.BOLD}
-					>
+					<ReminderTitle fontStyle={FontStyles.BOLD}>
 						{t("note.reminder")}
 					</ReminderTitle>
 					<Row>
@@ -107,17 +106,13 @@ export const NoteOptions: React.FC<INoteOptionsProps> = ({ onClose, note }) => {
 				</OptionContainer>
 				<OptionContainer onPress={handleDeleteNote} style={styles.button}>
 					<TrashIcon />
-					<TrashTitle
-						fontStyle={FontStyles.BOLD}
-					>
-						Delete Note
-					</TrashTitle>
+					<TrashTitle fontStyle={FontStyles.BOLD}>Delete Note</TrashTitle>
 				</OptionContainer>
 			</Container>
 			<DatePicker
 				modal
 				open={isOpenDatePicker}
-				date={reminderDate}
+				date={reminderDate ?? new Date()}
 				onConfirm={handleConfirmDatePicker}
 				onCancel={handleToggleDatePicker}
 			/>
@@ -132,7 +127,7 @@ const styles = StyleSheet.create({
 			width: 0,
 			height: 1,
 		},
-		shadowOpacity: 0.20,
+		shadowOpacity: 0.2,
 		shadowRadius: 1.41,
 
 		elevation: 2,
@@ -161,7 +156,6 @@ const ReminderTitle = styled(Text)`
 const TrashTitle = styled(Text)`
 	color: ${RED_COLOR};
 	margin-left: 12px;
-
 `;
 
 const Row = styled.View`

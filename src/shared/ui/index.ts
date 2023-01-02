@@ -6,3 +6,4 @@ export * from "./ButtonBack";
 export * from "./Input";
 export * from "./Button";
 export * from "./WithBottomSheet";
+export * from "./CustomModal";

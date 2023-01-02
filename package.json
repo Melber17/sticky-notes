@@ -27,6 +27,7 @@
 		"react-native": "0.70.6",
 		"react-native-color-picker": "^0.6.0",
 		"react-native-date-picker": "^4.2.6",
+		"react-native-fast-image": "^8.6.3",
 		"react-native-flipper": "^0.176.1",
 		"react-native-gesture-handler": "^2.8.0",
 		"react-native-keyboard-aware-scroll-view": "^0.9.5",

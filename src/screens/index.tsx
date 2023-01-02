@@ -13,7 +13,7 @@ import { initializeNotesData, INoteResponse } from "../entities/note";
 
 export type RootStackListType = {
 	HomeScreen: undefined;
-	CreateNoteScreen: {editable: boolean; note?: INoteResponse};
+	CreateNoteScreen: { editable: boolean; note?: INoteResponse };
 };
 
 const Stack = createNativeStackNavigator<RootStackListType>();
@@ -24,7 +24,6 @@ export const Routing: React.FC = () => {
 	const handleLaunchApp = async () => {
 		await dispatch(initializeNotesData());
 		SplashScreen.hide();
-
 	};
 
 	useEffect(() => {
@@ -32,12 +31,7 @@ export const Routing: React.FC = () => {
 	}, []);
 
 	useEffect(() => {
-
 		PushNotification.configure({
-			onNotification: function (notification) {
-				console.log("LOCAL NOTIFICATION ==>", notification);
-			},
-
 			permissions: {
 				alert: true,
 				badge: true,
@@ -60,8 +54,10 @@ export const Routing: React.FC = () => {
 			initialRouteName={RootScreens.HOME}
 		>
 			<Stack.Screen name={RootScreens.HOME} component={HomeScreen} />
-			<Stack.Screen name={RootScreens.CREATE_NOTE} component={CreateNoteScreen} />
-
+			<Stack.Screen
+				name={RootScreens.CREATE_NOTE}
+				component={CreateNoteScreen}
+			/>
 		</Stack.Navigator>
 	);
 };

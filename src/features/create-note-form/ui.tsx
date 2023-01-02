@@ -66,7 +66,7 @@ export const CreateNoteForm: React.FC<ICreateNoteFormProps> = ({
 				color: colorValue,
 				backgroundColor: backgroundColorValue,
 				id: note.id,
-				position: note.position
+				position: note.position,
 			};
 
 			await dispatch(editNote(noteResult));
@@ -130,7 +130,6 @@ export const CreateNoteForm: React.FC<ICreateNoteFormProps> = ({
 							<ThreeDotsIcon />
 						</ButtonWithIcon>
 					</ButtonWrapper>
-
 				</Row>
 			);
 		}
@@ -160,7 +159,7 @@ export const CreateNoteForm: React.FC<ICreateNoteFormProps> = ({
 					defaultValue={titleValue}
 					multiline
 					maxLength={100}
-					autoFocus
+					autoFocus={isEditable}
 					inputRef={titleInputRef}
 					editable={isEditableValue}
 					placeholder={t("note.title")}
