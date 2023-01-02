@@ -32,7 +32,7 @@ export const HomeScreen: React.FC<IProps> = ({ navigation }) => {
 		<WithSafeArea>
 			<Container>
 				<NotesList
-					headerComponent={<Header />}
+					headerComponent={<Header navigation={navigation}/>}
 					data={data}
 				/>
 				<Button onPress={handlePressButton} style={styles.button}>

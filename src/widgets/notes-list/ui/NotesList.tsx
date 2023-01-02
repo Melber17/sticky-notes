@@ -4,7 +4,6 @@ import styled from "styled-components/native";
 import { INoteResponse, setNewNotesData } from "../../../entities/note";
 import { Spacer } from "../../../shared/config";
 import { useAppDispatch } from "../../../shared/lib";
-import { Header } from "../../Header";
 import { EmptyListData } from "./EmptyListData";
 import { SortableListWrapper } from "./SortableListWrapper";
 
@@ -14,7 +13,7 @@ interface INotesListProps {
 }
 
 export const NotesList: React.FC<INotesListProps> = (props) => {
-	const { data } = props;
+	const { data, headerComponent } = props;
 	const dispatch = useAppDispatch();
 	const onDragEnd = (notesData: INoteResponse[]) => {
 		dispatch(setNewNotesData(notesData));
@@ -23,7 +22,7 @@ export const NotesList: React.FC<INotesListProps> = (props) => {
 	if (!data || !data.length) {
 		return (
 			<Wrapper>
-				<Header />
+				{headerComponent}
 				<EmptyListData />
 			</Wrapper>
 		);

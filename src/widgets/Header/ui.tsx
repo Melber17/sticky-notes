@@ -6,16 +6,20 @@ import Voice, { SpeechResultsEvent } from "@react-native-voice/voice";
 import { ButtonWithIcon, CustomModal, Text } from "../../shared/ui";
 import InfoIcon from "../../shared/assets/icons/InfoIcon.svg";
 import MicrophoneIcon from "../../shared/assets/icons/microphoneIcon.svg";
-import { Spacer } from "../../shared/config";
+import { GRAY_COLOR, Spacer } from "../../shared/config";
 import { AppInformation } from "../AppInformation";
+import { INavigation } from "../../screens/Home";
+import { RootScreens } from "../../screens/config";
 
-export const Header: React.FC = () => {
+interface IHeaderProps {
+	navigation: INavigation;
+}
+
+export const Header: React.FC<IHeaderProps> = ({ navigation }) => {
 	const textValue = React.useRef("");
 	const [isListening, setIsListening] = useState(false);
 	const { t } = useTranslation();
 	const [isOpenModal, setIsOpenModal] = useState(false);
-	const splitLastWords = (sentence: string, lastWordsCount: number) =>
-		sentence.split(" ").splice(-lastWordsCount).join().toLocaleLowerCase();
 
 	const stopSpeech = async () => {
 		return await Voice.destroy(), setIsListening(false);
@@ -26,14 +30,13 @@ export const Header: React.FC = () => {
 
 		if (text !== textValue.current) {
 			textValue.current = text;
-			const lastWord = splitLastWords(text, 1);
 
-			switch (lastWord) {
-			case "note":
-			default:
-				break;
+			if (text.includes("note")) {
+				navigation.navigate(RootScreens.CREATE_NOTE, { editable: true });
+				stopSpeech();
+
 			}
-			stopSpeech();
+
 		}
 	};
 
@@ -69,9 +72,9 @@ export const Header: React.FC = () => {
 			<Text size={40}>{t("general.title")}</Text>
 			<Row>
 				<ButtonWrapper>
-					<ButtonWithIcon onPress={toggleListening}>
+					<Wrapper isListening={isListening} onPress={toggleListening}>
 						<MicrophoneIcon />
-					</ButtonWithIcon>
+					</Wrapper>
 				</ButtonWrapper>
 				<ButtonWithIcon onPress={handleToggleInfo}>
 					<InfoIcon />
@@ -96,4 +99,15 @@ const Row = styled.View`
 
 const ButtonWrapper = styled.View`
 	margin-right: ${Spacer.MEDIUM}px;
+`;
+
+const Wrapper = styled.TouchableOpacity<{isListening: boolean}>`
+  width: 50px;
+  padding: 13px;
+  align-items: center;
+  border-radius: ${Spacer.MEDIUM}px;
+  justify-content: center;
+  background-color: ${GRAY_COLOR};
+	border-width: 1px;
+	border-color: ${({ isListening }) => isListening ? "green" : "transparent"};
 `;
