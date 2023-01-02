@@ -12,6 +12,10 @@
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+  <string>The application needs to access of the speech recognition</string>
+	<key>NSMicrophoneUsageDescription</key>
+  <string>The application needs to access of the microphone</string>
 	<key>CFBundleName</key>
 	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundlePackageType</key>

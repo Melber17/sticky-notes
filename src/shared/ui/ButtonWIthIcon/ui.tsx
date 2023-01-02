@@ -17,7 +17,7 @@ export const ButtonWithIcon: React.FC<IProps> = ({ children, onPress }) => {
 };
 
 const Wrapper = styled.TouchableOpacity`
-  max-width: 50px;
+  width: 50px;
   padding: 13px;
   align-items: center;
   border-radius: ${Spacer.MEDIUM}px;
