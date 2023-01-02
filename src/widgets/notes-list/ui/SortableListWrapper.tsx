@@ -9,7 +9,6 @@ import styled from "styled-components/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { CARD_HEIGHT } from "../config";
-import { Header } from "../../Header";
 import { INoteResponse } from "../../../entities/note";
 import { Spacer } from "../../../shared/config";
 import { calcNumberColumns } from "../lib";
@@ -19,11 +18,13 @@ interface ListProps {
 	editing: boolean;
 	data: INoteResponse[];
 	onDragEnd: (diff: INoteResponse[]) => void;
+	headerComponent: JSX.Element;
 }
 
 export const SortableListWrapper = ({
 	data,
 	editing,
+	headerComponent,
 	onDragEnd,
 }: ListProps) => {
 	const scrollY = useSharedValue(0);
@@ -56,7 +57,7 @@ export const SortableListWrapper = ({
 			bounces={false}
 			scrollEventThrottle={16}
 		>
-			<Header />
+			{headerComponent}
 			<SortableList
 				notesData={notesDataShared}
 				data={data}
@@ -76,5 +77,5 @@ const Container = styled(Animated.ScrollView)`
 
 const Block = styled.View<{ dataLength: number }>`
 	z-index: -1;
-	height: ${({ dataLength }) => dataLength * CARD_HEIGHT * 1.5}px;
+	height: ${({ dataLength }) => dataLength * CARD_HEIGHT * 2}px;
 `;

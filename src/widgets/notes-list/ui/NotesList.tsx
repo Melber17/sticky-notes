@@ -35,6 +35,7 @@ export const NotesList: React.FC<INotesListProps> = (props) => {
 					data={data}
 					editing={true}
 					onDragEnd={onDragEnd}
+					headerComponent={headerComponent}
 				/>
 			</Container>
 		</>
