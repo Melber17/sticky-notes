@@ -98,7 +98,9 @@ export const NoteOptions: React.FC<INoteOptionsProps> = ({ onClose, note }) => {
 			<Container>
 				<OptionContainer onPress={handleToggleDatePicker} style={styles.button}>
 					<ClockIcon />
-					<ReminderTitle fontStyle={FontStyles.BOLD}>
+					<ReminderTitle
+						numberOfLines={ 1 }
+						fontStyle={FontStyles.BOLD}>
 						{t("note.reminder")}
 					</ReminderTitle>
 					<Row>
@@ -108,7 +110,7 @@ export const NoteOptions: React.FC<INoteOptionsProps> = ({ onClose, note }) => {
 				</OptionContainer>
 				<OptionContainer onPress={handleDeleteNote} style={styles.button}>
 					<TrashIcon />
-					<TrashTitle fontStyle={FontStyles.BOLD}>Delete Note</TrashTitle>
+					<TrashTitle fontStyle={FontStyles.BOLD}>{t("note.delete")}</TrashTitle>
 				</OptionContainer>
 			</Container>
 			<DatePicker
@@ -145,12 +147,14 @@ const OptionContainer = styled.TouchableOpacity`
 	height: 56px;
 	background: ${LIGHT_GRAY_COLOR};
 	flex-direction: row;
+	align-items: center;
 	border-radius: ${Spacer.SMALL}px;
 	margin-bottom: ${Spacer.MEDIUM}px;
 	padding: ${Spacer.MEDIUM}px ${Spacer.SMALL}px;
 `;
 
 const ReminderTitle = styled(Text)`
+	max-width: 50%;
 	color: ${DARK_PURPLE_COLOR};
 	margin-left: 12px;
 `;

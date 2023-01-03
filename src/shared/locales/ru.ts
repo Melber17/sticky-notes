@@ -16,6 +16,7 @@ export default {
 			background: "Установить цвет фона",
 			reminder: "Установить напоминание",
 			emptyReminder: "Не установлен",
+			delete: "Удалить заметку",
 		},
 	},
 };

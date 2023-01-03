@@ -6,11 +6,12 @@ import styled from "styled-components/native";
 
 import { BLUE_COLOR, Fonts, FontStyles, Spacer } from "../../shared/config";
 import { Text } from "../../shared/ui";
+import { SOCIAL_MEDIA_LINK } from "./config";
 
 export const AppInformation: React.FC = () => {
 	const { t } = useTranslation();
 	const handleOpenLink = () => {
-		Linking.openURL("https://www.linkedin.com/in/evgeniy-masyuk/");
+		Linking.openURL(SOCIAL_MEDIA_LINK);
 	};
 
 	return (
@@ -43,7 +44,7 @@ const Title = styled(Text)`
 	margin: 0 auto;
 	font-size: ${Spacer.EXTRA_LARGE}px;
 	font-family: ${Fonts.NUNITO}-${FontStyles.BOLD};
-	padding: ${Spacer.MEDIUM}px;
+	padding-top: ${Spacer.MEDIUM}px;
 	padding-bottom: 0;
 `;
 

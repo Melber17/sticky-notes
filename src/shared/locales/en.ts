@@ -16,6 +16,7 @@ export default {
 			background: "Choose background",
 			reminder: "Set Reminder",
 			emptyReminder: "Not Set",
+			delete: "Delete Note",
 		},
 	},
 };

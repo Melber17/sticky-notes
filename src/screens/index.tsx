@@ -2,13 +2,14 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React, { useEffect } from "react";
 import SplashScreen from "react-native-splash-screen";
 import PushNotification from "react-native-push-notification";
-import { Platform } from "react-native";
+import { NativeModules, Platform } from "react-native";
+import { useTranslation } from "react-i18next";
 
 import { RootScreens } from "./config";
 import { HomeScreen } from "./Home";
-import i18next from "../shared/lib/i18n";
+import i18next, { LANGUAGES } from "../shared/lib/i18n";
 import { CreateNoteScreen } from "./CreateNote";
-import { useAppDispatch } from "../shared/lib";
+import { PlatformType, useAppDispatch } from "../shared/lib";
 import { initializeNotesData, INoteResponse } from "../entities/note";
 
 export type RootStackListType = {
@@ -16,11 +17,17 @@ export type RootStackListType = {
 	CreateNoteScreen: { editable: boolean; note?: INoteResponse };
 };
 
+const deviceLanguage =
+	Platform.OS === PlatformType.IOS
+		? NativeModules.SettingsManager.settings.AppleLocale ||
+	NativeModules.SettingsManager.settings.AppleLanguages[0]
+		: NativeModules.I18nManager.localeIdentifier;
+
 const Stack = createNativeStackNavigator<RootStackListType>();
 
 export const Routing: React.FC = () => {
 	const dispatch = useAppDispatch();
-
+	const { i18n } = useTranslation();
 	const handleLaunchApp = async () => {
 		await dispatch(initializeNotesData());
 		SplashScreen.hide();
@@ -44,6 +51,13 @@ export const Routing: React.FC = () => {
 
 	if (!i18next.isInitialized) {
 		return null;
+	}
+	const deviceLanguageArr = deviceLanguage.split("");
+	const currentDeviceLanguage = deviceLanguageArr
+		.splice(deviceLanguageArr.length - 2, deviceLanguageArr.length).join("");
+
+	if (i18n.language !== LANGUAGES.RU.value && currentDeviceLanguage === LANGUAGES.RU.value) {
+		i18n.changeLanguage(LANGUAGES.RU.value);
 	}
 
 	return (
