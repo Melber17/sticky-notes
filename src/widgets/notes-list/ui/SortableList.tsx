@@ -57,11 +57,6 @@ export default React.memo(SortableList, (prevProps, nextProps) => {
 	}
 });
 
-const Container = styled(Animated.ScrollView)`
-	flex: 1;
-	padding: ${Spacer.SMALL}px ${Spacer.MEDIUM}px 0;
-`;
-
 const ListWrapper = styled.View`
 	margin-top: ${Spacer.MEDIUM}px;
 `;

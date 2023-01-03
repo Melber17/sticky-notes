@@ -36,7 +36,9 @@ export const NoteOptions: React.FC<INoteOptionsProps> = ({ onClose, note }) => {
 	const bottomSheetRef = useRef<BottomSheet>(null);
 	const { t } = useTranslation();
 	const [isOpenDatePicker, setIsOpenDatePicker] = useState(false);
-	const [reminderDate, setReminderDate] = useState(note.reminder);
+	const [reminderDate, setReminderDate] = useState(
+		note.reminder ? new Date(note.reminder) : null
+	);
 	const snapPoints = useMemo(() => ["25%"], []);
 	const navigation = useNavigation();
 	const dispatch = useAppDispatch();
@@ -73,7 +75,7 @@ export const NoteOptions: React.FC<INoteOptionsProps> = ({ onClose, note }) => {
 		dispatch(
 			editNote({
 				...note,
-				reminder: date,
+				reminder: date.toString(),
 			})
 		);
 	};

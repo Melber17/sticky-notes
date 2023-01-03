@@ -25,6 +25,7 @@ export const CreateNoteScreen: React.FC<IProps> = ({ route }) => {
 		<>
 			<WithSafeArea>
 				<KeyboardAwareScrollView
+					keyboardShouldPersistTaps="always"
 				>
 					<Container>
 						<CreateNoteForm

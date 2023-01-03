@@ -24,7 +24,7 @@ export const initializeNotesData = createAsyncThunk(
 			const currentNotes = JSON.parse(notesData) as INoteResponse[];
 			const currentDate = new Date();
 			const filteredNotes = currentNotes.map(item => {
-				if (item.reminder && item.reminder < currentDate) {
+				if (item.reminder && new Date(item.reminder) < new Date(currentDate)) {
 					return {
 						...item,
 						reminder: null

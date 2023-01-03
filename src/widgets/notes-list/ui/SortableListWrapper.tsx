@@ -65,7 +65,7 @@ export const SortableListWrapper = ({
 				onDragEnd={onDragEnd}
 				isChangedData={isChangedData}
 			/>
-			<Block dataLength={data.length / currentNumberColumns} />
+			<Block dataLength={Math.round(data.length / currentNumberColumns)} />
 		</Container>
 	);
 };
@@ -77,5 +77,5 @@ const Container = styled(Animated.ScrollView)`
 
 const Block = styled.View<{ dataLength: number }>`
 	z-index: -1;
-	height: ${({ dataLength }) => dataLength * CARD_HEIGHT * 2}px;
+	height: ${({ dataLength }) => dataLength * (CARD_HEIGHT + Spacer.MEDIUM)}px;
 `;
