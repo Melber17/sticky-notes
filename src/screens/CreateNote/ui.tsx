@@ -16,7 +16,7 @@ interface IProps {
 
 export const CreateNoteScreen: React.FC<IProps> = ({ route }) => {
 	const [isVisibleBottomSheet, setIsVisibleBottomSheet] = useState(false);
-
+	const [currentNote, setCurrentNote] = useState(route.params.note);
 	const handleToggleVisible = () => {
 		setIsVisibleBottomSheet(prevValue => !prevValue);
 	};
@@ -36,8 +36,12 @@ export const CreateNoteScreen: React.FC<IProps> = ({ route }) => {
 					</Container>
 				</KeyboardAwareScrollView>
 			</WithSafeArea>
-			{isVisibleBottomSheet && route.params.note && (
-				<NoteOptions note={route.params.note} onClose={handleToggleVisible} />
+			{isVisibleBottomSheet && currentNote && (
+				<NoteOptions
+					setNote={setCurrentNote}
+					note={currentNote}
+					onClose={handleToggleVisible}
+				/>
 			)}
 		</>
 	);

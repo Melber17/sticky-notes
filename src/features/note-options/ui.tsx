@@ -29,10 +29,11 @@ import {
 
 interface INoteOptionsProps {
 	onClose: () => void;
+	setNote: (note: INoteResponse) => void;
 	note: INoteResponse;
 }
 
-export const NoteOptions: React.FC<INoteOptionsProps> = ({ onClose, note }) => {
+export const NoteOptions: React.FC<INoteOptionsProps> = ({ onClose, setNote, note }) => {
 	const bottomSheetRef = useRef<BottomSheet>(null);
 	const { t } = useTranslation();
 	const [isOpenDatePicker, setIsOpenDatePicker] = useState(false);
@@ -71,13 +72,15 @@ export const NoteOptions: React.FC<INoteOptionsProps> = ({ onClose, note }) => {
 				date: date,
 			});
 		}
+		const resultNote = {
+			...note,
+			reminder: date.toString()
+		};
 
 		dispatch(
-			editNote({
-				...note,
-				reminder: date.toString(),
-			})
+			editNote(resultNote)
 		);
+		setNote(resultNote);
 	};
 
 	const handleRenderDateValue = () => {

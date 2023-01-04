@@ -63,7 +63,7 @@ const DescriptionText = styled(Text)`
 	text-align: center;
 	font-size: 18px;
 	color: ${(props) => props.theme.colors.color};
-	font-family: ${Fonts.NUNITO}-${FontStyles.MEDIUM};
+	font-family: ${Fonts.NUNITO}-${FontStyles.SEMIBOLD};
 `;
 
 const LinkButton = styled.TouchableOpacity`
@@ -78,5 +78,3 @@ const LinkText = styled(Text)`
 	color: ${BLUE_COLOR};
 	font-family: ${Fonts.NUNITO}-${FontStyles.BOLD};
 `;
-
-const ButtonWrapper = styled.View``;

@@ -42,6 +42,12 @@ export const CreateNoteForm: React.FC<ICreateNoteFormProps> = ({
 	);
 	const navigation = useNavigation();
 	const handleSubmit = async () => {
+		if (!titleValue) {
+			return;
+		}
+		if (!descriptionValue) {
+			return;
+		}
 		const noteResult = {
 			title: titleValue,
 			description: descriptionValue,

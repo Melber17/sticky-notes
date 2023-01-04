@@ -3,7 +3,7 @@ import styled from "styled-components/native";
 import { StyleSheet } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { BLACK_COLOR, Spacer } from "../../shared/config";
+import { BLACK_COLOR, GRAY_COLOR, Spacer } from "../../shared/config";
 import { WithSafeArea } from "../../shared/ui";
 import { Header } from "../../widgets/Header";
 import { NotesList } from "../../widgets/notes-list";
@@ -68,7 +68,7 @@ const Button = styled.TouchableOpacity`
 	justify-content: center;
 	align-items: center;
 	border-radius: 35px;
-	background: ${(props) => props.theme.colors.background};
+	background: ${GRAY_COLOR};
 	position: absolute;
 	bottom: ${Spacer.EXTRA_LARGE}px;
 	right: ${Spacer.MEDIUM}px;

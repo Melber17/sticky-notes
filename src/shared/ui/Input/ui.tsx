@@ -2,7 +2,7 @@ import React, { RefObject } from "react";
 import { TextInput } from "react-native";
 import styled from "styled-components/native";
 
-import { PLACEHOLDER_COLOR, Spacer, WHITE_COLOR } from "../../config";
+import { PLACEHOLDER_COLOR, Spacer } from "../../config";
 
 interface IProps {
 	placeholder: string;
@@ -33,5 +33,5 @@ export const Input: React.FC<IProps> = (props) => {
 const Field = styled.TextInput<{ textSize?: number }>`
 	justify-content: center;
 	font-size: ${({ textSize }) => textSize ?? Spacer.MEDIUM}px;
-	color: ${WHITE_COLOR};
+	color: ${(props) => props.theme.colors.color};
 `;
