@@ -15,11 +15,10 @@ interface IProps {
 export const WithSafeArea: React.FC<IProps> = ({
 	children,
 	backgroundColor,
-	barStyle = "light-content",
 }) => {
 	const { top } = useSafeAreaInsets();
 
-	useColorScheme();
+	const colorScheme = useColorScheme();
 
 	const handleRenderSafeArea = () => {
 		if (Platform.OS === PlatformType.ANDROID) {
@@ -33,7 +32,10 @@ export const WithSafeArea: React.FC<IProps> = ({
 
 		return (
 			<SafeAreaIOS inset={top} backgroundColor={backgroundColor}>
-				<StatusBar translucent barStyle={barStyle} />
+				<StatusBar
+					translucent
+					barStyle={colorScheme === "light" ? "dark-content" : "light-content"}
+				/>
 				{children}
 			</SafeAreaIOS>
 		);
