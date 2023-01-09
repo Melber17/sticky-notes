@@ -68,8 +68,8 @@ export const SortableItem = ({
 		currentNumberColumns
 	);
 
-	const translateX = useSharedValue(position.x ?? 0);
-	const translateY = useSharedValue(position.y ?? 0);
+	const translateX = useSharedValue(position.x ? position.x : 0);
+	const translateY = useSharedValue(position.y ? position.y : 0);
 
 	useAnimatedReaction(
 		() => {

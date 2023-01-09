@@ -52,9 +52,8 @@ export const Routing: React.FC = () => {
 	if (!i18next.isInitialized) {
 		return null;
 	}
-	const deviceLanguageArr = deviceLanguage.split("");
-	const currentDeviceLanguage = deviceLanguageArr
-		.splice(deviceLanguageArr.length - 2, deviceLanguageArr.length).join("");
+
+	const currentDeviceLanguage = deviceLanguage.substring(0, 2).toUpperCase();
 
 	if (i18n.language !== LANGUAGES.RU.value && currentDeviceLanguage === LANGUAGES.RU.value) {
 		i18n.changeLanguage(LANGUAGES.RU.value);
