@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Platform, StyleSheet } from "react-native";
+import { LogBox, Platform, StyleSheet } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { enableFreeze, enableScreens } from "react-native-screens";
 
@@ -9,6 +9,7 @@ import { WithNavigation, WithTheme } from "./providers";
 import { WithRedux } from "./providers/with-redux";
 
 enableFreeze(true);
+LogBox.ignoreAllLogs();
 
 export const App: React.FC = () => {
 	useEffect(() => {

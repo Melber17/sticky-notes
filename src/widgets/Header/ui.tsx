@@ -26,7 +26,7 @@ export const Header: React.FC<IHeaderProps> = ({ navigation }) => {
 	};
 
 	const callAction = async (value: string[]) => {
-		const text = value[0];
+		const text = value[0].toLowerCase();
 
 		if (text !== textValue.current) {
 			textValue.current = text;
@@ -35,6 +35,12 @@ export const Header: React.FC<IHeaderProps> = ({ navigation }) => {
 				navigation.navigate(RootScreens.CREATE_NOTE, { editable: true });
 				stopSpeech();
 
+				return;
+			}
+
+			if (text.includes("information")) {
+				handleToggleInfo();
+				stopSpeech();
 			}
 
 		}
