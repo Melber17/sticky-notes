@@ -1,4 +1,4 @@
-package com.notes.newarchitecture.modules;
+package com.stickyNotes.newarchitecture.modules;
 
 import com.facebook.jni.HybridData;
 import com.facebook.react.ReactPackage;

@@ -1,10 +1,11 @@
 {
-	"name": "notes",
+	"name": "stickyNotes",
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
 		"android:run": "react-native run-android",
 		"android:build": "npx react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/build/intermediates/res/merged/release/ && cd android && ./gradlew assembleRelease && cd ..",
+		"android:release": "cd android && ./gradlew clean && cd .. && yarn android:build && cd android && ./gradlew bundleRelease && cd ..",
 		"ios:run": "react-native run-ios",
 		"start": "react-native start",
 		"test": "jest",
