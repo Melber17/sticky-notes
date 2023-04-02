@@ -8,7 +8,6 @@
 		"android:release": "cd android && ./gradlew clean && cd .. && yarn android:build && cd android && ./gradlew bundleRelease && cd ..",
 		"ios:run": "react-native run-ios",
 		"start": "react-native start",
-		"test": "jest",
 		"lint:check": "eslint . --ext .js,.jsx,.ts,.tsx",
 		"lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
 		"prepare": "husky install",
